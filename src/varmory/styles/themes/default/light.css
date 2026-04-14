@@ -1,0 +1,41 @@
+:root {
+	/* Brand — clean modern: sky blue primary, fresh green accent */
+	--q-primary: #2196f3;
+	--q-secondary: #00b862;
+	--q-accent: #2fa884;
+	--q-dark: #1a1d23;
+	--q-positive: #00b862;
+	--q-negative: #ef4444;
+	--q-info: #2196f3;
+	--q-warning: #f5a623;
+
+	/* Surface layers — bright, airy, card-based */
+	--q-body-bg: #d4ecfc;
+	--q-surface-0: #d4ecfc;
+	--q-surface-1: #e4f2fc;
+	--q-surface-2: #ffffff;
+	--q-surface-3: #f5f8fb;
+	--q-surface-border: #d0dce6;
+	--q-surface-overlay: rgba(255, 255, 255, 0.95);
+
+	/* Panel composites — clean white cards */
+	--q-panel-gradient: linear-gradient(180deg, #ffffff 0%, #fafcfe 100%);
+	--q-panel-compact-gradient: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+
+	/* Text hierarchy — crisp dark on light */
+	--q-text-bright: #1a1d23;
+	--q-text: #3d4550;
+	--q-text-muted: #8494a7;
+	--q-text-faint: rgba(61, 69, 80, 0.18);
+
+	/* Shadows — soft, modern elevation */
+	--q-glow-primary: color-mix(in srgb, var(--q-primary) 8%, transparent);
+	--q-glow-accent: color-mix(in srgb, var(--q-accent) 8%, transparent);
+	--q-glow-warning: color-mix(in srgb, var(--q-warning) 8%, transparent);
+	--q-shadow-drop: rgba(0, 40, 80, 0.06);
+	--q-shadow-inset: rgba(0, 40, 80, 0.03);
+}
+
+.jPanel.fullscreen {
+	background: linear-gradient(170deg, #d4ecfc 0%, #c5e4f8 40%, #d0e9fb 70%, #d8eefb 100%);
+}

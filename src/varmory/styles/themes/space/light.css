@@ -1,0 +1,42 @@
+
+:root {
+	/* Brand — slightly deeper for white backgrounds */
+	--q-primary: #05b88a;
+	--q-secondary: #b08200;
+	--q-accent: #c026d3;
+	--q-dark: #0f172a;
+	--q-positive: #059669;
+	--q-negative: #dc2626;
+	--q-info: #2563eb;
+	--q-warning: #d97706;
+
+	/* Surface layers — light scale */
+	--q-body-bg: #f4f6f9;
+	--q-surface-0: #f4f6f9;
+	--q-surface-1: #eaecf1;
+	--q-surface-2: #ffffff;
+	--q-surface-3: #f8f9fb;
+	--q-surface-border: #d1d5db;
+	--q-surface-overlay: rgba(255, 255, 255, 0.88);
+
+	/* Panel composites */
+	--q-panel-gradient: linear-gradient(180deg, var(--q-surface-2) 0%, var(--q-surface-3) 100%);
+	--q-panel-compact-gradient: linear-gradient(135deg, color-mix(in srgb, white 96%, transparent) 0%, color-mix(in srgb, var(--q-surface-1) 95%, transparent) 100%);
+
+	/* Text hierarchy — dark on light */
+	--q-text-bright: #0f172a;
+	--q-text: #334155;
+	--q-text-muted: #94a3b8;
+	--q-text-faint: rgba(51, 65, 85, 0.3);
+
+	/* Shadows — softer for light mode */
+	--q-glow-primary: color-mix(in srgb, var(--q-primary) 15%, transparent);
+	--q-glow-accent: color-mix(in srgb, var(--q-accent) 15%, transparent);
+	--q-glow-warning: color-mix(in srgb, var(--q-warning) 15%, transparent);
+	--q-shadow-drop: rgba(0, 0, 0, 0.08);
+	--q-shadow-inset: rgba(0, 0, 0, 0.05);
+}
+
+.jPanel.fullscreen {
+	background: url('./assets/background.jpg') center / cover no-repeat !important;
+}

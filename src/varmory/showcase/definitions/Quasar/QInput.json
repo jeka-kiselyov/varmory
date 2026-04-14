@@ -1,0 +1,53 @@
+{
+  "type": "component",
+  "meta": { "docsUrl": "https://v2.quasar.dev/vue-components/input" },
+  "props": {
+    "model-value": { "type": ["String", "Number", "null"], "desc": "Model of the component; use v-model directive", "required": true, "category": "model" },
+    "type": { "type": "String", "default": "'text'", "desc": "Input type (text, password, textarea, email, search, tel, file, number, url, time, date)", "category": "general" },
+    "label": { "type": "String", "desc": "A text label that will float above the input field", "category": "content" },
+    "hint": { "type": "String", "desc": "Helper text below the field", "category": "content" },
+    "hide-hint": { "type": "Boolean", "desc": "Hide hint when field is not focused", "category": "content" },
+    "placeholder": { "type": "String", "desc": "Input placeholder text", "category": "content" },
+    "prefix": { "type": "String", "desc": "Prefix text", "category": "content" },
+    "suffix": { "type": "String", "desc": "Suffix text", "category": "content" },
+    "shadow-text": { "type": "String", "desc": "Shadow text displayed at the end of the input", "category": "content" },
+    "stack-label": { "type": "Boolean", "desc": "Force the label to always be visible", "category": "content" },
+    "label-color": { "type": "String", "desc": "Label color from the Quasar Color Palette", "category": "style" },
+    "color": { "type": "String", "desc": "Color name from the Quasar Color Palette", "category": "style" },
+    "bg-color": { "type": "String", "desc": "Background color from the Quasar Color Palette", "category": "style" },
+    "filled": { "type": "Boolean", "desc": "Use filled design", "category": "style" },
+    "outlined": { "type": "Boolean", "desc": "Use outlined design", "category": "style" },
+    "borderless": { "type": "Boolean", "desc": "Use borderless design", "category": "style" },
+    "standout": { "type": ["Boolean", "String"], "desc": "Use standout design", "category": "style" },
+    "rounded": { "type": "Boolean", "desc": "Applies a more prominent border-radius", "category": "style" },
+    "square": { "type": "Boolean", "desc": "Removes border-radius", "category": "style" },
+    "dense": { "type": "Boolean", "desc": "Dense mode; occupies less space", "category": "style" },
+    "clearable": { "type": "Boolean", "desc": "Appends clearable icon when a value is set", "category": "behavior" },
+    "counter": { "type": "Boolean", "desc": "Show a character counter at the bottom", "category": "content" },
+    "maxlength": { "type": ["String", "Number"], "desc": "Specify a max length of model", "category": "model" },
+    "autogrow": { "type": "Boolean", "desc": "Make field autogrow along with its content (uses textarea)", "category": "content" },
+    "autofocus": { "type": "Boolean", "desc": "Focus field on initial component render", "category": "behavior" },
+    "debounce": { "type": ["String", "Number"], "desc": "Debounce amount (ms) when updating model", "category": "model" },
+    "loading": { "type": "Boolean", "desc": "Signals a process is in progress by displaying a spinner", "category": "behavior" },
+    "disable": { "type": "Boolean", "desc": "Put component in disabled mode", "category": "state" },
+    "readonly": { "type": "Boolean", "desc": "Put component in readonly mode", "category": "state" }
+  },
+  "slots": {
+    "default": { "desc": "Field main content" },
+    "prepend": { "desc": "Prepend inner field; suggestion: QIcon, QBtn" },
+    "append": { "desc": "Append to inner field; suggestion: QIcon, QBtn" },
+    "before": { "desc": "Prepend outer field; suggestion: QIcon, QBtn" },
+    "after": { "desc": "Append outer field; suggestion: QIcon, QBtn" },
+    "label": { "desc": "Custom label; overrides the 'label' prop if used" },
+    "hint": { "desc": "Custom hint content" },
+    "counter": { "desc": "Custom counter content" },
+    "error": { "desc": "Custom error content" },
+    "loading": { "desc": "Override default spinner when loading" }
+  },
+  "events": {
+    "update:model-value": { "desc": "Emitted when the model value changes" },
+    "focus": { "desc": "Emitted when the field receives focus" },
+    "blur": { "desc": "Emitted when the field loses focus" },
+    "clear": { "desc": "Emitted when the clearable icon is clicked" }
+  }
+}

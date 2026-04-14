@@ -1,0 +1,19 @@
+{
+  "type": "component",
+  "meta": { "docsUrl": "https://v2.quasar.dev/vue-components/inner-loading" },
+  "props": {
+    "showing": { "type": "Boolean", "desc": "State - loading or not", "category": "model" },
+    "color": { "type": "String", "desc": "Color name from the Quasar Color Palette for the spinner", "category": "style" },
+    "size": { "type": "String", "desc": "Size in CSS units for the default spinner", "category": "style" },
+    "label": { "type": "String", "desc": "Text to display below the spinner", "category": "content" },
+    "label-class": { "type": "String", "desc": "CSS class(es) for the label", "category": "style" },
+    "label-style": { "type": ["String", "Array", "Object"], "desc": "CSS style for the label", "category": "style" },
+    "dark": { "type": "Boolean", "desc": "Notify the component that the background is dark", "category": "style" },
+    "transition-show": { "type": "String", "default": "'fade'", "desc": "Transition name when showing", "category": "behavior" },
+    "transition-hide": { "type": "String", "default": "'fade'", "desc": "Transition name when hiding", "category": "behavior" },
+    "transition-duration": { "type": ["String", "Number"], "default": "300", "desc": "Transition duration (in milliseconds)", "category": "behavior" }
+  },
+  "slots": {
+    "default": { "desc": "Replaces the default spinner with custom content" }
+  }
+}

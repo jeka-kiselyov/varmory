@@ -1,0 +1,41 @@
+{
+  "type": "component",
+  "meta": { "docsUrl": "https://v2.quasar.dev/vue-components/button-dropdown" },
+  "props": {
+    "label": { "type": ["String", "Number"], "desc": "Text shown on the button", "category": "content" },
+    "icon": { "type": "String", "desc": "Icon name following Quasar convention", "category": "content" },
+    "color": { "type": "String", "desc": "Color name from the Quasar Color Palette", "category": "style" },
+    "text-color": { "type": "String", "desc": "Overrides text color (if needed)", "category": "style" },
+    "flat": { "type": "Boolean", "desc": "Use flat design (no background)", "category": "style" },
+    "outline": { "type": "Boolean", "desc": "Use outline design", "category": "style" },
+    "unelevated": { "type": "Boolean", "desc": "Remove shadow", "category": "style" },
+    "rounded": { "type": "Boolean", "desc": "Applies a more prominent border-radius", "category": "style" },
+    "push": { "type": "Boolean", "desc": "Use push design", "category": "style" },
+    "dense": { "type": "Boolean", "desc": "Dense mode; occupies less space", "category": "style" },
+    "split": { "type": "Boolean", "desc": "Split dropdown arrows into a separate button", "category": "behavior" },
+    "dropdown-icon": { "type": "String", "desc": "Override default dropdown icon", "category": "content" },
+    "no-icon-animation": { "type": "Boolean", "desc": "Disable dropdown icon rotation animation", "category": "style" },
+    "disable": { "type": "Boolean", "desc": "Put component in disabled mode", "category": "state" },
+    "auto-close": { "type": "Boolean", "desc": "Allows the menu to match at least the full width of its target", "category": "behavior" },
+    "persistent": { "type": "Boolean", "desc": "Allows the menu to not be dismissed by a click/tap outside or ESC key", "category": "behavior" },
+    "cover": { "type": "Boolean", "desc": "Menu will cover the button when shown", "category": "behavior" },
+    "menu-anchor": { "type": "String", "desc": "Position of the menu on the target (e.g. 'bottom left')", "category": "position" },
+    "menu-self": { "type": "String", "desc": "Position of the menu relative to itself (e.g. 'top left')", "category": "position" },
+    "content-class": { "type": ["String", "Array", "Object"], "desc": "Class definitions to be attributed to the menu", "category": "style" },
+    "content-style": { "type": ["String", "Array", "Object"], "desc": "Style definitions to be attributed to the menu", "category": "style" },
+    "loading": { "type": ["Boolean", "null"], "default": "null", "desc": "Put button into loading state", "category": "behavior" },
+    "stretch": { "type": "Boolean", "desc": "When on flexbox parent, stretches to parent's height", "category": "content" },
+    "no-caps": { "type": "Boolean", "desc": "Avoid turning label text into caps", "category": "content" }
+  },
+  "slots": {
+    "default": { "desc": "Default slot for menu content" },
+    "label": { "desc": "Customize button label" }
+  },
+  "events": {
+    "click": { "desc": "Emitted when the main button is clicked (only for split mode)", "params": { "evt": { "type": "Object", "desc": "JS event object" } } },
+    "show": { "desc": "Emitted when the menu is shown" },
+    "hide": { "desc": "Emitted when the menu is hidden" },
+    "before-show": { "desc": "Emitted before the menu is shown" },
+    "before-hide": { "desc": "Emitted before the menu is hidden" }
+  }
+}

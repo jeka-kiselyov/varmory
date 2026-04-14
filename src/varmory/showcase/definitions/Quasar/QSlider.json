@@ -1,0 +1,36 @@
+{
+  "type": "component",
+  "meta": { "docsUrl": "https://v2.quasar.dev/vue-components/slider" },
+  "props": {
+    "model-value": { "type": ["Number", "null"], "default": "null", "desc": "Model of the component (must be between min/max); use v-model", "required": true, "category": "model" },
+    "min": { "type": "Number", "default": "0", "desc": "Minimum value of the model", "category": "model", "required": false },
+    "max": { "type": "Number", "default": "100", "desc": "Maximum value of the model", "category": "model", "required": false },
+    "step": { "type": "Number", "default": "1", "desc": "Step amount between valid values (> 0.0); 0 defines infinite granularity", "category": "model", "required": false },
+    "snap": { "type": "Boolean", "desc": "Snap on valid values, rather than sliding freely", "category": "behavior" },
+    "reverse": { "type": "Boolean", "desc": "Work in reverse (changes direction)", "category": "behavior" },
+    "vertical": { "type": "Boolean", "desc": "Display in vertical direction", "category": "behavior" },
+    "color": { "type": "String", "desc": "Color name from the Quasar Color Palette", "category": "style" },
+    "track-color": { "type": "String", "desc": "Color name for the track", "category": "style" },
+    "thumb-color": { "type": "String", "desc": "Color name for the thumb", "category": "style" },
+    "label": { "type": "Boolean", "desc": "Popup a label when user clicks/taps on the slider thumb", "category": "content" },
+    "label-color": { "type": "String", "desc": "Color name for the label", "category": "style" },
+    "label-always": { "type": "Boolean", "desc": "Always display the label", "category": "content" },
+    "label-value": { "type": ["String", "Number"], "desc": "Override default label value", "category": "content" },
+    "markers": { "type": ["Boolean", "Number"], "desc": "Display markers on the track", "category": "content" },
+    "marker-labels": { "type": ["Boolean", "Array", "Object", "Function"], "desc": "Configure the marker labels", "category": "content" },
+    "track-size": { "type": "String", "default": "'4px'", "desc": "Track size (including CSS unit)", "category": "style", "required": false },
+    "thumb-size": { "type": "String", "default": "'20px'", "desc": "Thumb size (including CSS unit)", "category": "style", "required": false },
+    "dense": { "type": "Boolean", "desc": "Dense mode; occupies less space", "category": "style" },
+    "disable": { "type": "Boolean", "desc": "Put component in disabled mode", "category": "state" },
+    "readonly": { "type": "Boolean", "desc": "Put component in readonly mode", "category": "state" },
+    "dark": { "type": ["Boolean", "null"], "default": "null", "desc": "Notify the component that the background is a dark color", "category": "style", "required": false }
+  },
+  "slots": {
+    "marker-label": { "desc": "Custom marker label slot" }
+  },
+  "events": {
+    "update:model-value": { "desc": "Emitted when the component needs to change the model; used by v-model" },
+    "change": { "desc": "Emitted on lazy model value change (after user releases the thumb)" },
+    "pan": { "desc": "Triggered when user starts/ends panning on the component" }
+  }
+}

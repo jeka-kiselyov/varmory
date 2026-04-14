@@ -1,0 +1,171 @@
+{
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/menu"
+  },
+  "props": {
+    "model-value": {
+      "type": ["Boolean", "null"],
+      "desc": "Model of the component defining shown/hidden state; Use with v-model",
+      "default": "null",
+      "category": "model",
+      "examples": ["v-model=\"menuVisible\""]
+    },
+    "target": {
+      "type": ["Boolean", "String", "Element"],
+      "desc": "Configure a target element to trigger component toggle; 'true' enables the parent DOM element",
+      "default": "true",
+      "category": "behavior",
+      "examples": ["false", ".my-parent", "#target-id"]
+    },
+    "context-menu": {
+      "type": "Boolean",
+      "desc": "Opens with a right mouse click (or long tap on mobile)",
+      "category": "behavior"
+    },
+    "fit": {
+      "type": "Boolean",
+      "desc": "Allows the menu to match at least the full width of its target",
+      "category": "position"
+    },
+    "cover": {
+      "type": "Boolean",
+      "desc": "Allows the menu to cover its target. When used, 'self' and 'fit' are no longer effective",
+      "category": "position"
+    },
+    "anchor": {
+      "type": "String",
+      "desc": "Starting position of the menu relative to its target",
+      "values": ["top left", "top middle", "top right", "center left", "center middle", "center right", "bottom left", "bottom middle", "bottom right"],
+      "category": "position"
+    },
+    "self": {
+      "type": "String",
+      "desc": "Menu's own position relative to its target",
+      "values": ["top left", "top middle", "top right", "center left", "center middle", "center right", "bottom left", "bottom middle", "bottom right"],
+      "category": "position"
+    },
+    "offset": {
+      "type": "Array",
+      "desc": "An array of two numbers to offset the menu horizontally and vertically in pixels",
+      "examples": ["[8, 8]", "[5, 10]"],
+      "category": "position"
+    },
+    "persistent": {
+      "type": "Boolean",
+      "desc": "Menu won't be dismissed by click/tap outside or ESC key",
+      "category": "behavior"
+    },
+    "no-esc-dismiss": {
+      "type": "Boolean",
+      "desc": "User cannot dismiss the popup by hitting ESC key",
+      "category": "behavior"
+    },
+    "auto-close": {
+      "type": "Boolean",
+      "desc": "Any click/tap in the menu closes it; Useful instead of v-close-popup on each item",
+      "category": "behavior"
+    },
+    "touch-position": {
+      "type": "Boolean",
+      "desc": "Menu position set by the mouse/touch position when target is clicked",
+      "category": "behavior"
+    },
+    "square": {
+      "type": "Boolean",
+      "desc": "Forces content to have squared borders",
+      "category": "style"
+    },
+    "max-height": {
+      "type": ["String", "null"],
+      "desc": "The maximum height of the menu; Size in CSS units",
+      "default": "null",
+      "examples": ["'200px'", "'50vh'"],
+      "category": "style"
+    },
+    "max-width": {
+      "type": ["String", "null"],
+      "desc": "The maximum width of the menu; Size in CSS units",
+      "default": "null",
+      "examples": ["'300px'", "'80vw'"],
+      "category": "style"
+    },
+    "transition-show": {
+      "type": "String",
+      "desc": "One of Quasar's embedded transitions for showing",
+      "default": "'fade'",
+      "examples": ["'fade'", "'slide-down'"],
+      "category": "transition"
+    },
+    "transition-hide": {
+      "type": "String",
+      "desc": "One of Quasar's embedded transitions for hiding",
+      "default": "'fade'",
+      "examples": ["'fade'", "'slide-down'"],
+      "category": "transition"
+    },
+    "dark": {
+      "type": ["Boolean", "null"],
+      "desc": "Notify the component that the background is a dark color",
+      "default": "null",
+      "category": "style"
+    },
+    "separate-close-popup": {
+      "type": "Boolean",
+      "desc": "Separate from parent menu, marking it as a separate closing point for v-close-popup",
+      "category": "behavior"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Default slot for the menu content"
+    }
+  },
+  "events": {
+    "update:model-value": {
+      "desc": "Emitted when shown/hidden state changes; Used by v-model",
+      "params": {
+        "value": { "type": "Boolean", "desc": "New state (showing/hidden)" }
+      }
+    },
+    "show": {
+      "desc": "Emitted after component has triggered show()",
+      "params": { "evt": { "type": "Event", "desc": "JS event object" } }
+    },
+    "before-show": {
+      "desc": "Emitted when component triggers show() but before it finishes",
+      "params": { "evt": { "type": "Event", "desc": "JS event object" } }
+    },
+    "hide": {
+      "desc": "Emitted after component has triggered hide()",
+      "params": { "evt": { "type": "Event", "desc": "JS event object" } }
+    },
+    "before-hide": {
+      "desc": "Emitted when component triggers hide() but before it finishes",
+      "params": { "evt": { "type": "Event", "desc": "JS event object" } }
+    },
+    "escape-key": {
+      "desc": "Emitted when ESC key is pressed; Not emitted if 'persistent' or 'no-esc-dismiss' is set"
+    }
+  },
+  "methods": {
+    "show": {
+      "desc": "Triggers component to show",
+      "params": { "evt": { "type": "Event", "required": false } }
+    },
+    "hide": {
+      "desc": "Triggers component to hide",
+      "params": { "evt": { "type": "Event", "required": false } }
+    },
+    "toggle": {
+      "desc": "Triggers component to toggle between show/hide",
+      "params": { "evt": { "type": "Event", "required": false } }
+    },
+    "updatePosition": {
+      "desc": "Manually reposition the menu"
+    },
+    "focus": {
+      "desc": "Focus menu; if content has autofocus attribute, it will directly focus it"
+    }
+  }
+}

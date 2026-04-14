@@ -1,0 +1,24 @@
+{
+  "type": "component",
+  "meta": { "docsUrl": "https://v2.quasar.dev/vue-components/tab-panels" },
+  "props": {
+    "model-value": { "type": "Any", "desc": "Current panel name; use v-model (synced with QTabs model)", "required": true, "category": "model" },
+    "keep-alive": { "type": "Boolean", "desc": "Equivalent to Vue's native <keep-alive> on the content", "category": "behavior" },
+    "animated": { "type": "Boolean", "desc": "Enable transitions between panels", "category": "behavior" },
+    "infinite": { "type": "Boolean", "desc": "Makes navigation infinite (wraps around)", "category": "behavior" },
+    "swipeable": { "type": "Boolean", "desc": "Enable swipe gestures to switch panels", "category": "behavior" },
+    "vertical": { "type": "Boolean", "desc": "Transitions and swipe on the vertical axis", "category": "behavior" },
+    "transition-prev": { "type": "String", "desc": "Transition when going to previous panel (requires 'animated')", "default": "'slide-right'", "category": "transition" },
+    "transition-next": { "type": "String", "desc": "Transition when going to next panel (requires 'animated')", "default": "'slide-left'", "category": "transition" },
+    "transition-duration": { "type": ["String", "Number"], "default": "300", "desc": "Transition duration in milliseconds", "category": "transition" },
+    "dark": { "type": ["Boolean", "null"], "default": "null", "desc": "Notify the component that the background is a dark color", "category": "style" }
+  },
+  "slots": {
+    "default": { "desc": "Default slot for QTabPanel components" }
+  },
+  "events": {
+    "update:model-value": { "desc": "Emitted when the active panel changes" },
+    "before-transition": { "desc": "Emitted before transitioning to a new panel" },
+    "transition": { "desc": "Emitted after transitioning to a new panel" }
+  }
+}

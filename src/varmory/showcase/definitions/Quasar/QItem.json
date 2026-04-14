@@ -1,0 +1,28 @@
+{
+  "type": "component",
+  "meta": { "docsUrl": "https://v2.quasar.dev/vue-components/list-and-list-items" },
+  "props": {
+    "active": { "type": ["Boolean", "null"], "default": "null", "desc": "Put item into 'active' state", "category": "state" },
+    "active-class": { "type": "String", "default": "q-item--active", "desc": "The class to apply on active state", "category": "style" },
+    "clickable": { "type": "Boolean", "desc": "Is QItem clickable? If true, then it will add hover effects and emit 'click' events", "category": "state" },
+    "dense": { "type": "Boolean", "desc": "Dense mode; occupies less space", "category": "style" },
+    "dark": { "type": ["Boolean", "null"], "default": "null", "desc": "Notify the component that the background is a dark color", "category": "style" },
+    "disable": { "type": "Boolean", "desc": "Put component in disabled mode", "category": "state" },
+    "focused": { "type": "Boolean", "desc": "Determines focus state", "category": "state" },
+    "inset-level": { "type": "Number", "desc": "Apply an inset; Useful for right-side content when left side has something like avatar or icon", "category": "content" },
+    "manual-focus": { "type": "Boolean", "desc": "Determines manual focus state", "category": "state" },
+    "tag": { "type": "String", "default": "div", "desc": "HTML element tag to render", "category": "content" },
+    "tabindex": { "type": ["String", "Number"], "desc": "Tabindex HTML attribute value", "category": "general" },
+    "to": { "type": ["String", "Object"], "desc": "Equivalent to Vue Router <router-link> 'to' property", "category": "navigation" },
+    "exact": { "type": "Boolean", "desc": "Equivalent to Vue Router <router-link> 'exact' property", "category": "navigation" },
+    "replace": { "type": "Boolean", "desc": "Equivalent to Vue Router <router-link> 'replace' property", "category": "navigation" },
+    "href": { "type": "String", "desc": "Native <a> link href attribute", "category": "navigation" },
+    "target": { "type": "String", "desc": "Native <a> link target attribute", "category": "navigation" }
+  },
+  "slots": {
+    "default": { "desc": "Default slot in the devland unslotted content of the component" }
+  },
+  "events": {
+    "click": { "desc": "Emitted when the component is clicked", "params": { "evt": { "type": "Event" } } }
+  }
+}

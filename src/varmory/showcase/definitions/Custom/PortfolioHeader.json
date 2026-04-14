@@ -1,0 +1,43 @@
+{
+  "type": "component",
+  "meta": {},
+  "props": {
+    "title": {
+      "type": "String",
+      "default": "'Portfolio Overview'",
+      "desc": "Top-left label displayed with a dot indicator. Ignored when #logo slot is provided.",
+      "category": "content"
+    },
+    "always-collapsed": {
+      "type": "Boolean",
+      "default": "false",
+      "desc": "Lock header in compact mode. Disables scroll listener.",
+      "category": "behavior"
+    },
+    "always-expanded": {
+      "type": "Boolean",
+      "default": "false",
+      "desc": "Lock header in expanded mode. Disables scroll listener.",
+      "category": "behavior"
+    }
+  },
+  "slots": {
+    "logo": {
+      "desc": "Replaces the default title + dot indicator with custom content (e.g. icon + brand name)."
+    },
+    "collapsed": {
+      "desc": "Content shown inline in the top bar only when the header is in compact mode. Useful for a condensed balance display."
+    },
+    "expanded": {
+      "desc": "Main content area below the top bar. Collapses to 0 height on scroll via CSS grid transition."
+    },
+    "right": {
+      "desc": "Right side of the top bar. Always visible in desktop. Hidden on mobile (replaced by #menu)."
+    },
+    "menu": {
+      "desc": "Dropdown menu content shown on mobile via a round icon button. Hidden on desktop."
+    }
+  },
+  "events": {},
+  "methods": {}
+}

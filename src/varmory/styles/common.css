@@ -1,0 +1,173 @@
+@import "./vars.css";
+
+html {
+	font-family: var(--font-body);
+}
+body {
+	color: var(--q-text);
+	font-family: var(--font-body);
+	background: var(--q-body-bg);
+}
+a {
+	color: var(--q-primary);
+}
+
+#app .q-btn {
+	text-transform: none;
+	font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: var(--font-display);
+	font-family: var(--font-body);
+	margin: 0 0 0 0;
+}
+
+.text-bright {
+	color: var(--q-text-bright);
+}
+
+.text-text {
+	color: var(--q-text);
+}
+
+.text-muted {
+	color: var(--q-text-muted);
+}
+
+.text-faint {
+	color: var(--q-text-faint);
+}
+
+.bg-surface-0 {
+	background: var(--q-surface-0);
+}
+.bg-surface-1 {
+	background: var(--q-surface-1);
+}
+.bg-surface-2 {
+	background: var(--q-surface-2);
+}
+.bg-surface-3 {
+	background: var(--q-surface-3);
+}
+.text-surface-0 {
+	color: var(--q-surface-0);
+}
+.text-surface-1 {
+	color: var(--q-surface-1);
+}
+.text-surface-2 {
+	color: var(--q-surface-2);
+}
+.text-surface-3 {
+	color: var(--q-surface-3);
+}
+
+.q-tab-panels {
+	background: var(--q-panel-gradient);
+}
+
+.q-panel {
+	background: var(--q-panel-gradient);
+	border: none;
+}
+
+.q-dialog .q-card {
+	background: var(--q-surface-0);
+	border: 2px solid var(--q-surface-border);
+	box-shadow: none;
+}
+
+
+/* ── Scrollbars ── */
+
+/* Firefox */
+* {
+	scrollbar-width: thin;
+	scrollbar-color: color-mix(in srgb, var(--q-primary), transparent 50%) transparent;
+}
+
+/* Chrome / Safari / Edge */
+::-webkit-scrollbar {
+	width: 4px;
+	height: 4px;
+}
+
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	background: color-mix(in srgb, var(--q-primary), transparent 50%);
+	border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: color-mix(in srgb, var(--q-primary), transparent 70%);
+}
+
+::-webkit-scrollbar-corner {
+	background: transparent;
+}
+
+
+/* menu styling */
+.q-menu {
+    background: var(--q-surface-2);
+    border: 1px solid var(--q-surface-border);
+    border-radius: 3px;
+    /* box-shadow: 0 8px 32px color-mix(in srgb, black 50%, transparent), 0 0 1px color-mix(in srgb, var(--_color, var(--q-primary)) 15%, transparent); */
+    padding: 0px 0;
+}
+
+.q-menu .q-item {
+    color: var(--q-text-bright);
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    padding: 8px 16px;
+    min-height: 32px;
+}
+
+.q-menu .q-item:hover,
+.q-menu .q-item--active {
+    background: color-mix(in srgb, var(--_color, var(--q-primary)) 12%, transparent);
+    color: var(--_color, var(--q-primary));
+}
+
+.q-menu .q-separator {
+    background: var(--q-surface-border);
+    margin: 0px 0;
+}
+
+.q-menu .q-item__label {
+    font-family: var(--font-body);
+}
+
+.q-menu .q-item .q-item__section--avatar {
+	min-width: auto;
+}
+
+.q-menu .q-item .q-icon {
+	font-size: 16px;
+	min-width: auto;;
+}
+
+/* Ghost variant — minimal text button */
+
+.q-btn.ghost {
+    --_divider: var(--q-text-muted) !important;
+    color: var(--q-text-muted) !important;
+    border-color: transparent !important;
+    background: transparent !important;
+    font-family: var(--font-mono) !important;
+}
+.q-btn.ghost:hover {
+    color: var(--q-text) !important;
+    background: color-mix(in srgb, white 6%, transparent) !important;
+}
+.q-btn.ghost:before {
+	box-shadow: none !important;
+}

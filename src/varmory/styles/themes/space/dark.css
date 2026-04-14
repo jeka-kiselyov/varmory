@@ -1,0 +1,46 @@
+
+:root {
+	/* Quasar brand colors — defaults */
+	--q-primary: #06d6a0;
+	--q-secondary: #d49c00;
+	--q-accent: #e040fb;
+	--q-dark: #050a14;
+	--q-positive: #06d6a0;
+	--q-negative: #ef4444;
+	--q-info: #4da2ff;
+	--q-warning: #f09000;
+
+	/* Surface layers */
+	--q-body-bg: #050a14;
+	--q-surface-0: #050a14;
+	--q-surface-1: #0a1628;
+	--q-surface-2: #0d1f3c;
+	--q-surface-3: #132d54;
+	--q-surface-border: #1a3a6a;
+	--q-surface-overlay: rgba(5, 10, 20, 0.85);
+
+	/* Panel surface composites */
+	--q-panel-gradient: linear-gradient(180deg, var(--q-surface-2) 0%, color-mix(in srgb, var(--q-surface-2) 60%, transparent) 100%);
+	--q-panel-compact-gradient: linear-gradient(135deg, color-mix(in srgb, var(--q-surface-2) 95%, transparent) 0%, color-mix(in srgb, var(--q-surface-1) 95%, transparent) 100%);
+
+	/* Text hierarchy */
+	--q-text-bright: #f0f4f8;
+	--q-text: #c8d6e5;
+	--q-text-muted: #8cadce;
+	--q-text-faint: rgba(174, 210, 245, 0.822);
+
+	/* Shadows & glows */
+	--q-glow-primary: color-mix(in srgb, var(--q-primary) 25%, transparent);
+	--q-glow-accent: color-mix(in srgb, var(--q-accent) 25%, transparent);
+	--q-glow-warning: color-mix(in srgb, var(--q-warning) 25%, transparent);
+	--q-shadow-drop: color-mix(in srgb, black 55%, transparent);
+	--q-shadow-inset: color-mix(in srgb, black 30%, transparent);
+}
+
+/* ── Fullscreen panel — starfield ───────────────────────── */
+
+.jPanel.fullscreen {
+	background:
+		linear-gradient(rgba(3, 8, 16, 0.45), rgba(3, 8, 16, 0.45)),
+		url('./assets/background.jpg') center / cover no-repeat !important;
+}

@@ -1,0 +1,22 @@
+{
+  "type": "component",
+  "meta": { "docsUrl": "https://v2.quasar.dev/vue-components/rating" },
+  "props": {
+    "model-value": { "type": "Number", "desc": "Model of the component; use v-model directive", "required": true, "category": "model" },
+    "max": { "type": ["Number", "String"], "default": "5", "desc": "Number of icons to display", "category": "general", "required": false },
+    "icon": { "type": ["String", "Array"], "desc": "Icon name following Quasar convention; if array, each rating value uses corresponding icon", "category": "content" },
+    "icon-selected": { "type": ["String", "Array"], "desc": "Icon name to use when selected", "category": "content" },
+    "icon-half": { "type": ["String", "Array"], "desc": "Icon name to use for half selection", "category": "content" },
+    "color": { "type": ["String", "Array"], "desc": "Color name from the Quasar Color Palette; if array, each value uses corresponding color", "category": "style" },
+    "color-selected": { "type": ["String", "Array"], "desc": "Color name for selected icons", "category": "style" },
+    "color-half": { "type": ["String", "Array"], "desc": "Color name for half selected icons", "category": "style" },
+    "size": { "type": "String", "desc": "Size in CSS units or standard size name (xs|sm|md|lg|xl)", "category": "style" },
+    "no-dimming": { "type": "Boolean", "desc": "Does not lower opacity for unselected icons", "category": "style" },
+    "no-reset": { "type": "Boolean", "desc": "Disables resetting model to 0 when clicking current value", "category": "model" },
+    "readonly": { "type": "Boolean", "desc": "Put component in readonly mode", "category": "state" },
+    "disable": { "type": "Boolean", "desc": "Put component in disabled mode", "category": "state" }
+  },
+  "events": {
+    "update:model-value": { "desc": "Emitted when the component needs to change the model; used by v-model" }
+  }
+}

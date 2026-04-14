@@ -1,0 +1,24 @@
+{
+  "type": "component",
+  "meta": { "docsUrl": "https://v2.quasar.dev/vue-components/radio" },
+  "props": {
+    "model-value": { "type": ["Any"], "desc": "Model of the component; use v-model directive", "required": true, "category": "model" },
+    "val": { "type": ["Any"], "desc": "The actual value of the option with which model value is changed", "required": true, "category": "model" },
+    "label": { "type": "String", "desc": "Label to display along the radio control", "category": "label" },
+    "left-label": { "type": "Boolean", "desc": "Label should be displayed on the left side", "category": "label" },
+    "checked-icon": { "type": "String", "desc": "Icon to use when selected", "category": "icons" },
+    "unchecked-icon": { "type": "String", "desc": "Icon to use when un-selected", "category": "icons" },
+    "color": { "type": "String", "desc": "Color name from the Quasar Color Palette", "category": "style" },
+    "keep-color": { "type": "Boolean", "desc": "Keep color when unticked", "category": "behavior" },
+    "size": { "type": "String", "desc": "Size in CSS units or standard size name (xs|sm|md|lg|xl)", "category": "style" },
+    "dense": { "type": "Boolean", "desc": "Dense mode; occupies less space", "category": "style" },
+    "disable": { "type": "Boolean", "desc": "Put component in disabled mode", "category": "state" },
+    "dark": { "type": ["Boolean", "null"], "default": "null", "desc": "Notify the component that the background is a dark color", "category": "style", "required": false }
+  },
+  "slots": {
+    "default": { "desc": "Default slot can be used as label, unless 'label' prop is specified" }
+  },
+  "events": {
+    "update:model-value": { "desc": "Emitted when the component needs to change the model; used by v-model" }
+  }
+}

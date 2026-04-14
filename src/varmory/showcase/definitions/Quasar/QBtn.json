@@ -1,0 +1,47 @@
+{
+  "type": "component",
+  "meta": { "docsUrl": "https://v2.quasar.dev/vue-components/button" },
+  "props": {
+    "type": { "type": "String", "default": "'button'", "desc": "Native type attribute (submit, reset, button) or 'a' for link behavior", "category": "general" },
+    "label": { "type": ["String", "Number"], "desc": "Text shown on the button", "category": "content" },
+    "icon": { "type": "String", "desc": "Icon name following Quasar convention", "category": "content" },
+    "icon-right": { "type": "String", "desc": "Icon name following Quasar convention; placed on the right side", "category": "content" },
+    "color": { "type": "String", "desc": "Color name from the Quasar Color Palette", "category": "style" },
+    "text-color": { "type": "String", "desc": "Overrides text color (if needed); Color name from the Quasar Color Palette", "category": "style" },
+    "flat": { "type": "Boolean", "desc": "Use flat design (no background)", "category": "style" },
+    "outline": { "type": "Boolean", "desc": "Use outline design", "category": "style" },
+    "unelevated": { "type": "Boolean", "desc": "Remove shadow", "category": "style" },
+    "rounded": { "type": "Boolean", "desc": "Applies a more prominent border-radius", "category": "style" },
+    "round": { "type": "Boolean", "desc": "Makes a circle shaped button", "category": "style" },
+    "push": { "type": "Boolean", "desc": "Use push design", "category": "style" },
+    "square": { "type": "Boolean", "desc": "Removes border-radius so borders are squared", "category": "style" },
+    "glossy": { "type": "Boolean", "desc": "Applies a glossy effect", "category": "style" },
+    "fab": { "type": "Boolean", "desc": "Makes button size and shape fit a Floating Action Button", "category": "style" },
+    "fab-mini": { "type": "Boolean", "desc": "Makes button size and shape fit a small Floating Action Button", "category": "style" },
+    "padding": { "type": "String", "desc": "Custom padding (vertical [horizontal]); CSS units or size names (none|xs|sm|md|lg|xl)", "category": "style" },
+    "no-caps": { "type": "Boolean", "desc": "Avoid turning label text into caps", "category": "content" },
+    "no-wrap": { "type": "Boolean", "desc": "Avoid label text wrapping", "category": "content" },
+    "dense": { "type": "Boolean", "desc": "Dense mode; occupies less space", "category": "style" },
+    "stack": { "type": "Boolean", "desc": "Stack icon and label vertically", "category": "content" },
+    "stretch": { "type": "Boolean", "desc": "When on flexbox parent, stretches to parent's height", "category": "content" },
+    "loading": { "type": ["Boolean", "null"], "default": "null", "desc": "Put button into loading state (displays a QSpinner)", "category": "behavior" },
+    "disable": { "type": "Boolean", "desc": "Put component in disabled mode", "category": "state" },
+    "href": { "type": "String", "desc": "Native <a> link href attribute; has priority over 'to' and 'replace'", "category": "navigation" },
+    "target": { "type": "String", "desc": "Native <a> link target attribute; use with 'to' or 'href'", "category": "navigation" },
+    "to": { "type": ["String", "Object"], "desc": "Equivalent to Vue Router <router-link> 'to' property", "category": "navigation" },
+    "replace": { "type": "Boolean", "desc": "Equivalent to Vue Router <router-link> 'replace' property", "category": "navigation" },
+    "percentage": { "type": "Number", "desc": "Percentage (0–100); used with 'loading' to display a progress bar on the background", "category": "behavior" },
+    "dark-percentage": { "type": "Boolean", "desc": "Progress bar should have dark color; used with 'percentage' and 'loading'", "category": "behavior" },
+    "ripple": { "type": ["Boolean", "Object"], "default": "true", "desc": "Configure material ripple", "category": "style" },
+    "size": { "type": "String", "desc": "Size in CSS units, including unit name, or standard size name (xs|sm|md|lg|xl)", "category": "style" },
+    "align": { "type": "String", "default": "'center'", "desc": "Label or content alignment", "category": "content" },
+    "tabindex": { "type": ["Number", "String"], "desc": "Tabindex HTML attribute value", "category": "general" }
+  },
+  "slots": {
+    "default": { "desc": "Custom content, instead of relying on 'icon' and 'label' props" },
+    "loading": { "desc": "Override the default QSpinner when in loading state" }
+  },
+  "events": {
+    "click": { "desc": "Emitted when the component is clicked" }
+  }
+}
