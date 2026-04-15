@@ -31,8 +31,9 @@ cp "$ROOT/mcp/package.json" "$TMPDIR/mcp/"
 # Copy docs and source for the MCP tools to read
 cp "$ROOT/README.md" "$TMPDIR/"
 cp -r "$ROOT/docs" "$TMPDIR/docs"
-cp -r "$ROOT/src/varmory/showcase/categories" "$TMPDIR/src/varmory/showcase/categories" 2>/dev/null || true
-cp -r "$ROOT/src/varmory/showcase/definitions" "$TMPDIR/src/varmory/showcase/definitions" 2>/dev/null || true
+mkdir -p "$TMPDIR/src/varmory/showcase"
+cp -r "$ROOT/src/varmory/showcase/categories" "$TMPDIR/src/varmory/showcase/categories"
+cp -r "$ROOT/src/varmory/showcase/definitions" "$TMPDIR/src/varmory/showcase/definitions"
 
 # Create root package.json for Heroku
 cat > "$TMPDIR/package.json" << 'PKGJSON'

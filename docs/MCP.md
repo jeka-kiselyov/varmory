@@ -1,6 +1,18 @@
 # MCP Server
 
-An [MCP](https://modelcontextprotocol.io/) server that exposes the component library's showcase data — docs, components, and API definitions — to AI agents like Claude Code.
+An Streamable HTTP [MCP](https://modelcontextprotocol.io/) server that exposes the component library's showcase data — docs, components, and API definitions — to AI agents like Claude Code.
+
+## Hosted Server
+
+A public instance of Streamable HTTP MCP server is available at:
+
+```
+https://varmory-dec8b20a1b83.herokuapp.com/mcp
+```
+
+Transport: Streamable HTTP.
+
+To launch MCP server of your own set of components/DOC files, set up the MCP server ( or use the one defined in `mcp/server.js` that hosts both MCP and Component Showcase app ).
 
 ## Quick Start
 
@@ -106,15 +118,6 @@ attachShowcase(server, {
 
 All tools are annotated as read-only, non-destructive, and idempotent.
 
-## Hosted Server
-
-A public instance is available at:
-
-```
-https://varmory-dec8b20a1b83.herokuapp.com/mcp
-```
-
-Transport: Streamable HTTP. The demo SPA is served at the root of the same URL.
 
 ## Testing with MCP Inspector
 

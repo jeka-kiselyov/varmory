@@ -21,7 +21,7 @@ export default defineConfig({
         rollupOptions: {
             // make sure to externalize deps that shouldn't be bundled
             // into your library
-            external: ["vue", "quasar", "@quasar/extras", 'pinia', '@highlightjs/vue-plugin', 'highlight.js'],
+            external: ["vue", "quasar", "@quasar/extras", 'pinia'],
             output: {
                 // Provide global variables to use in the UMD build
                 // for externalized deps
@@ -29,9 +29,7 @@ export default defineConfig({
                     vue: "Vue",
                     quasar: "Quasar",
                     "@quasar/extras": "QuasarExtras",
-                    pinia: "Pinia",
-                    "@highlightjs/vue-plugin": "HighlightJSVuePlugin",
-                    "highlight.js": "HighlightJS",
+                    pinia: "Pinia"
                 },
             },
             makeAbsoluteExternalsRelative: true,
@@ -40,6 +38,6 @@ export default defineConfig({
     },
     resolve: {
         // Deduplicate pinia to ensure a single instance during development
-        dedupe: ['pinia', 'vue']
+        dedupe: ['pinia', 'vue', 'quasar', '@quasar/extras']
     },
 });

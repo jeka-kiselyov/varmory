@@ -80,16 +80,22 @@ export const useThemeStore = defineStore('theme', {
 
             this._loadedTheme = themeName;
             LocalStorage.set('theme', themeName);
+            LocalStorage.set('themeDefault', this._defaultTheme);
 
             await document.fonts.ready;
             this.ready = true;
         },
         async initialize({ theme, themes }) {
             this.themes = themes;
+            this._defaultTheme = theme;
 
-            // Restore theme from localStorage, fall back to provided default
+            // Restore theme from localStorage, fall back to provided default.
+            // If the app's default theme has changed since last save, ignore the stored preference.
             const storedTheme = LocalStorage.getItem('theme');
-            this.currentTheme = (storedTheme && themes[storedTheme]) ? storedTheme : theme;
+            const storedDefault = LocalStorage.getItem('themeDefault');
+            if (storedDefault === null) LocalStorage.set('themeDefault', theme);
+            const defaultChanged = storedDefault !== null && storedDefault !== theme;
+            this.currentTheme = (!defaultChanged && storedTheme && themes[storedTheme]) ? storedTheme : theme;
 
             // Restore dark mode from localStorage, fall back to Quasar state
             const storedDark = LocalStorage.getItem('isDark');

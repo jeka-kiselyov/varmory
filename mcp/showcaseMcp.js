@@ -263,7 +263,7 @@ export default function attachShowcase(server, options = {}) {
             const results = [];
             for (const [cat, items] of Object.entries(categories)) {
                 for (const item of items) {
-                    if (item.name.toLowerCase().includes(q) || item.label.toLowerCase().includes(q)) {
+                    if (item.name.toLowerCase().includes(q) || item.label.toLowerCase().includes(q) || (item.importName && item.importName.toLowerCase().includes(q))) {
                         results.push({ category: cat, name: item.name, label: item.label });
                     }
                 }
@@ -287,7 +287,7 @@ export default function attachShowcase(server, options = {}) {
         async ({ name }) => {
             const q = name.toLowerCase();
             for (const [cat, items] of Object.entries(categories)) {
-                const item = items.find(i => i.name.toLowerCase() === q || i.label.toLowerCase() === q);
+                const item = items.find(i => i.name.toLowerCase() === q || i.label.toLowerCase() === q || (i.importName && i.importName.toLowerCase() === q));
                 if (item) {
                     const lines = [`# ${item.label}`, `Category: ${cat}`];
                     if (item.importName) lines.push(`Import: ${item.importName} from '${item.importFrom || 'varmory'}'`);
