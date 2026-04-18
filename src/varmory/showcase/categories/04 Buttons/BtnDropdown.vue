@@ -94,6 +94,13 @@
                         <QItem clickable v-close-popup><QItemSection>Option B</QItemSection></QItem>
                     </QList>
                 </QBtnDropdown>
+
+                <QBtnDropdown color="primary" label="Dense" dense>
+                    <QList>
+                        <QItem clickable v-close-popup><QItemSection>Option A</QItemSection></QItem>
+                        <QItem clickable v-close-popup><QItemSection>Option B</QItemSection></QItem>
+                    </QList>
+                </QBtnDropdown>
             </div>
         </div>
 
@@ -103,7 +110,6 @@
             <div class="jShowcase_items">
                 <QBtnDropdown color="info" label="Loading" loading />
                 <QBtnDropdown color="negative" label="Disabled" disable />
-                <QBtnDropdown color="secondary" label="Dense" dense />
                 <QBtnDropdown color="primary" label="No Icon Animation" no-icon-animation>
                     <QList>
                         <QItem clickable v-close-popup><QItemSection>Option</QItemSection></QItem>

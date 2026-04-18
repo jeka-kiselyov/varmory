@@ -8,6 +8,7 @@
 			</template>
 			<template #right>
 				<JDarkSwitcher />
+				<QBtn @click="test" label="Test" />
 			</template>
 		</PortfolioHeader>
 
@@ -84,6 +85,9 @@ export default {
 	mounted() {
 	},
 	methods: {
+		test() {
+			this.$q.notify('test');
+		}
 	}
 };
 </script>

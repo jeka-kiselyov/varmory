@@ -16,26 +16,40 @@
             <span class="sliderLabel">Disabled</span>
             <QSlider :model-value="40" color="info" disable />
         </div>
+        <div class="sliderItem">
+            <span class="sliderLabel">Range</span>
+            <QRange v-model="range" color="primary" :min="0" :max="100" label />
+        </div>
+        <div class="sliderItem">
+            <span class="sliderLabel">Range stepped</span>
+            <QRange v-model="rangeStepped" color="accent" :min="0" :max="100" :step="10" snap markers label />
+        </div>
     </div>
 </template>
 
 <script>
-import { QSlider } from 'quasar';
+import { QSlider, QRange } from 'quasar';
 import QSliderApi from '../../definitions/Quasar/QSlider.json';
+import QRangeApi from '../../definitions/Quasar/QRange.json';
 
 export default {
     name: 'ShowcaseQuasarSlider',
-    components: { QSlider },
-    label: 'Quasar Slider',
+    components: { QSlider, QRange },
+    label: 'Slider / Range',
     icon: 'edit_note',
-    apiJson: QSliderApi,
-    importName: 'QSlider',
+    apiJson: [
+        { name: 'QSlider', json: QSliderApi },
+        { name: 'QRange', json: QRangeApi },
+    ],
+    importName: ['QSlider', 'QRange'],
     importFrom: 'quasar',
     data() {
         return {
             basic: 60,
             labeled: 35,
             stepped: 20,
+            range: { min: 20, max: 70 },
+            rangeStepped: { min: 30, max: 80 },
         };
     },
 };

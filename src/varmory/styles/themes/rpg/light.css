@@ -36,18 +36,3 @@
 	--q-shadow-drop: rgba(60, 40, 20, 0.10);
 	--q-shadow-inset: rgba(60, 40, 20, 0.06);
 }
-
-.jPanel.fullscreen {
-	background:
-		repeating-conic-gradient(
-			rgba(120, 100, 70, 0.04) 0% 25%,
-			transparent 0% 50%
-		) 0 0 / 4px 4px,
-		linear-gradient(
-			175deg,
-			#f0e6d4 0%,
-			#ecdcc6 30%,
-			#e6d4ba 60%,
-			#ecdcc6 100%
-		);
-}

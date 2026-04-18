@@ -1,0 +1,33 @@
+{
+  "type": "component",
+  "meta": { "docsUrl": "https://v2.quasar.dev/vue-components/time" },
+  "props": {
+    "model-value": { "type": ["String", "null"], "desc": "Time of the component; use v-model", "required": true, "category": "model" },
+    "format24h": { "type": ["Boolean", "null"], "default": "null", "desc": "Forces 24 hour time display instead of AM/PM system", "category": "behavior" },
+    "mask": { "type": ["String", "null"], "default": "'HH:mm'", "desc": "Time formatting mask", "category": "model" },
+    "with-seconds": { "type": "Boolean", "desc": "Allow the time to be set with seconds", "category": "behavior" },
+    "now-btn": { "type": "Boolean", "desc": "Display a button that selects the current time", "category": "content" },
+    "hour-options": { "type": "Array", "desc": "Optionally configure what hours the user is allowed to set", "category": "behavior" },
+    "minute-options": { "type": "Array", "desc": "Optionally configure what minutes the user is allowed to set", "category": "behavior" },
+    "second-options": { "type": "Array", "desc": "Optionally configure what seconds the user is allowed to set", "category": "behavior" },
+    "options": { "type": "Function", "desc": "Optionally configure what time the user is allowed to set", "category": "behavior" },
+    "default-date": { "type": "String", "desc": "The default date to use (YYYY/MM/DD) when model is unfilled", "category": "model" },
+    "color": { "type": "String", "desc": "Color name from the Quasar Color Palette", "category": "style" },
+    "text-color": { "type": "String", "desc": "Color name for the text", "category": "style" },
+    "square": { "type": "Boolean", "desc": "Removes border-radius so borders are squared", "category": "style" },
+    "flat": { "type": "Boolean", "desc": "Applies a flat design (no default shadow)", "category": "style" },
+    "bordered": { "type": "Boolean", "desc": "Applies a default border to the component", "category": "style" },
+    "readonly": { "type": "Boolean", "desc": "Put component in readonly mode", "category": "state" },
+    "disable": { "type": "Boolean", "desc": "Put component in disabled mode", "category": "state" },
+    "dark": { "type": ["Boolean", "null"], "default": "null", "desc": "Notify the component that the background is a dark color", "category": "style" }
+  },
+  "slots": {
+    "default": { "desc": "This is where additional buttons can go" }
+  },
+  "events": {
+    "update:model-value": { "desc": "Emitted when the component needs to change the model; used by v-model" }
+  },
+  "methods": {
+    "setNow": { "desc": "Change model to current moment" }
+  }
+}

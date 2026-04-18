@@ -36,6 +36,3 @@
 	--q-shadow-inset: rgba(0, 40, 80, 0.03);
 }
 
-.jPanel.fullscreen {
-	background: linear-gradient(170deg, #d4ecfc 0%, #c5e4f8 40%, #d0e9fb 70%, #d8eefb 100%);
-}

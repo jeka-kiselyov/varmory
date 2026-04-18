@@ -6,11 +6,7 @@
 	--font-mono: 'IBM Plex Mono', monospace;
 }
 
-
-/* ── PortfolioHeader ─────────────────────────────────────── */
-
-.portfolioHeader .portfolioHeader_frame {
-	border-width: 0px;
+.varmoryBackgroundAccent {
 	background:
 		/* scanlines — horizontal lines like a CRT / radar display */
 		repeating-linear-gradient(
@@ -35,59 +31,35 @@
 		);
 }
 
-.portfolioHeader.compact .portfolioHeader_frame {
-	background: var(--q-panel-compact-gradient);
-	border-bottom-width: 1px;
-	border-color: var(--q-primary);
-	border-image: linear-gradient(90deg, transparent, var(--q-primary), transparent) 1;
+.varmoryBackgroundAccent .varmoryBackgroundAccentContainer {
+	position: relative;
+	overflow: hidden;
 }
 
-.portfolioHeader .portfolioHeader_frame::before {
+.varmoryBackgroundAccent .varmoryBackgroundAccentContainer::before {
+	content: "";  
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 1px;
+	opacity: 0.6;
 	background: linear-gradient(90deg, transparent, var(--q-primary) 40%, var(--q-accent) 60%, transparent);
 }
+.varmoryBackgroundAccentCompact.varmoryBackgroundAccent .varmoryBackgroundAccentContainer::before {
+	top: auto;
+	bottom: 0;
+}
 
-.portfolioHeader .portfolioHeader_frame::after {
+.varmoryBackgroundAccent .varmoryBackgroundAccentContainer::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 200px;
+	height: 200px;
+	pointer-events: none;
 	background: radial-gradient(ellipse 200px 150px at 85% 20%, color-mix(in srgb, var(--q-primary) 12%, transparent) 0%, transparent 100%);
 }
 
-.portfolioHeader .portfolioHeader_corner {
-	border-color: color-mix(in srgb, var(--q-primary) 50%, var(--q-surface-border));
-}
-
-.portfolioHeader .portfolioHeader_tag {
-	color: var(--q-primary);
-}
-
-.portfolioHeader .portfolioHeader_tagDot {
-	background: var(--q-primary);
-	box-shadow: 0 0 8px var(--q-primary), 0 0 2px var(--q-accent);
-}
-
-.portfolioHeader_collapsed .amountDisplay_currency,
-.portfolioHeader_collapsed .amountDisplay_whole,
-.portfolioHeader_collapsed .amountDisplay_decimal {
-	color: var(--q-text-bright);
-}
-
-
-/* ── PortfolioFooter ─────────────────────────────────────── */
-
-.portfolioFooter .portfolioFooter_frame {
-	background: var(--q-panel-compact-gradient);
-	border-color: var(--q-primary);
-	border-image: linear-gradient(90deg, transparent, var(--q-primary), transparent) 1;
-}
-
-.portfolioFooter .portfolioFooter_tag {
-	color: var(--q-primary);
-}
-
-.portfolioFooter .portfolioFooter_tagDot {
-	background: var(--q-primary);
-	box-shadow: 0 0 8px var(--q-primary), 0 0 2px var(--q-accent);
-}
-
-.portfolioFooter .portfolioFooter_divider {
-	background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--q-primary) 20%, transparent) 20%, color-mix(in srgb, var(--q-accent) 15%, transparent) 80%, transparent);
-}
 

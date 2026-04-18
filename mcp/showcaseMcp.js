@@ -46,14 +46,23 @@ function parseVueFile(filePath) {
 
     const labelMatch = raw.match(/label:\s*['"](.+?)['"]/);
     const iconMatch = raw.match(/icon:\s*['"](.+?)['"]/);
-    const importNameMatch = raw.match(/importName:\s*['"](.+?)['"]/);
     const importFromMatch = raw.match(/importFrom:\s*['"](.+?)['"]/);
+
+    // importName can be a string or an array: importName: 'QBtn' or importName: ['QSlider', 'QRange']
+    const importArrayMatch = raw.match(/importName:\s*\[([^\]]+)\]/);
+    let importName = null;
+    if (importArrayMatch) {
+        importName = importArrayMatch[1].match(/['"]([^'"]+)['"]/g)?.map(s => s.replace(/['"]/g, '')) || null;
+    } else {
+        const importNameMatch = raw.match(/importName:\s*['"](.+?)['"]/);
+        importName = importNameMatch?.[1] || null;
+    }
 
     return {
         name,
         label: labelMatch?.[1] || name,
         icon: iconMatch?.[1] || null,
-        importName: importNameMatch?.[1] || null,
+        importName,
         importFrom: importFromMatch?.[1] || null,
         template,
     };
@@ -231,7 +240,8 @@ export default function attachShowcase(server, options = {}) {
         for (const [cat, items] of Object.entries(categories)) {
             lines.push(`## ${cat}`);
             for (const item of items) {
-                const imp = item.importName ? ` (${item.importName})` : '';
+                const impNames = Array.isArray(item.importName) ? item.importName.join(', ') : item.importName;
+                const imp = impNames ? ` (${impNames})` : '';
                 lines.push(`- ${item.label}${imp}`);
             }
             lines.push('');
@@ -263,7 +273,8 @@ export default function attachShowcase(server, options = {}) {
             const results = [];
             for (const [cat, items] of Object.entries(categories)) {
                 for (const item of items) {
-                    if (item.name.toLowerCase().includes(q) || item.label.toLowerCase().includes(q) || (item.importName && item.importName.toLowerCase().includes(q))) {
+                    const impNames = Array.isArray(item.importName) ? item.importName : (item.importName ? [item.importName] : []);
+                    if (item.name.toLowerCase().includes(q) || item.label.toLowerCase().includes(q) || impNames.some(n => n.toLowerCase().includes(q))) {
                         results.push({ category: cat, name: item.name, label: item.label });
                     }
                 }
@@ -287,10 +298,12 @@ export default function attachShowcase(server, options = {}) {
         async ({ name }) => {
             const q = name.toLowerCase();
             for (const [cat, items] of Object.entries(categories)) {
-                const item = items.find(i => i.name.toLowerCase() === q || i.label.toLowerCase() === q || (i.importName && i.importName.toLowerCase() === q));
+                const impMatch = (imp) => { const names = Array.isArray(imp) ? imp : (imp ? [imp] : []); return names.some(n => n.toLowerCase() === q); };
+                const item = items.find(i => i.name.toLowerCase() === q || i.label.toLowerCase() === q || impMatch(i.importName));
                 if (item) {
                     const lines = [`# ${item.label}`, `Category: ${cat}`];
-                    if (item.importName) lines.push(`Import: ${item.importName} from '${item.importFrom || 'varmory'}'`);
+                    const impNames = Array.isArray(item.importName) ? item.importName : (item.importName ? [item.importName] : []);
+                    for (const n of impNames) lines.push(`Import: ${n} from '${item.importFrom || 'varmory'}'`);
                     if (item.template) lines.push('', '## Template', '```html', item.template, '```');
                     return { content: [{ type: 'text', text: lines.join('\n') }] };
                 }

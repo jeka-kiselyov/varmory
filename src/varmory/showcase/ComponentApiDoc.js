@@ -10,6 +10,7 @@ export default {
                 loading: this.apiLoading,
                 error: this.apiError,
                 apiData: this.apiData,
+                groups: this.apiGroups,
                 docsUrl: this.apiDocsUrl,
                 propsList: this.apiPropsList,
                 slotsList: this.apiSlotsList,

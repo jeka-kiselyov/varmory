@@ -20,8 +20,11 @@ import { useThemeStore } from './stores/theme.js';
 // This function allows for app.use() in Vue
 const plugin = {
     install(app, options) {
-        app.use(Quasar, options); // note, this doesn't register components
-                                  // you have to use @quasar/vite-plugin in parent vite.config.js
+        if (!app.config.globalProperties.$q) {
+            app.use(Quasar, options); // note, this doesn't register components
+                                    // you have to use @quasar/vite-plugin in parent vite.config.js
+        }
+        
         app.component('JPanel', JPanel);
         app.component('JComponentShowcase', JComponentShowcase);
         app.component('JComponentShowcaseWithContent', JComponentShowcaseWithContent);

@@ -37,6 +37,3 @@
 	--q-shadow-inset: rgba(0, 0, 0, 0.05);
 }
 
-.jPanel.fullscreen {
-	background: url('./assets/background.jpg') center / cover no-repeat !important;
-}

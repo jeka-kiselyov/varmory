@@ -32,8 +32,8 @@ app.use(Varmory, {
 
 ## Docs
 
-- [Usage](docs/USAGE.md) — setting up a fresh app using varmory for UI, Vite config, and Quasar plugin setup
-- [Building Components](docs/CustomComponents.md) — API style, CSS variables, layout patterns, component composition, and styling conventions
-- [Theming](docs/THEMING.md) — built-in themes, custom themes, writing your own, theme store API, and UI components
-- [Showcase](docs/SHOWCASE.md) — interactive component browser, adding categories, custom docs, writing showcase entries, and navigation
-- [MCP Server](docs/MCP.md) — expose showcase data to AI agents via the Model Context Protocol
+- [Usage](https://varmory-dec8b20a1b83.herokuapp.com/#docs/USAGE) — setting up a fresh app using varmory for UI, Vite config, and Quasar plugin setup
+- [Building Components](https://varmory-dec8b20a1b83.herokuapp.com/#docs/CustomComponents) — API style, CSS variables, layout patterns, component composition, and styling conventions
+- [Theming](https://varmory-dec8b20a1b83.herokuapp.com/#docs/THEMING) — built-in themes, custom themes, writing your own, theme store API, and UI components
+- [Showcase](https://varmory-dec8b20a1b83.herokuapp.com/#docs/SHOWCASE) — interactive component browser, adding categories, custom docs, writing showcase entries, and navigation
+- [MCP Server](https://varmory-dec8b20a1b83.herokuapp.com/#docs/MCP) — expose showcase data to AI agents via the Model Context Protocol

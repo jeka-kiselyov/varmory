@@ -86,6 +86,8 @@ Each theme is a folder with three files: `common.css` (common css for theme, var
 
 Copy any of these as a starting point and adjust the values.
 
+When implementing `common.css`, see [AccentBackground.md](./AccentBackground.md) for the `varmoryBackgroundAccent` contract — it's the shared hook themes use to paint signature backgrounds on JPanel's `accent` variant and on components like `PortfolioHeader`.
+
 ## Theme store
 
 You can control theming programmatically via the Pinia store:

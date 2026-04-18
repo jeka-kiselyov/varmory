@@ -54,6 +54,39 @@
             </QCard>
         </QDialog>
 
+        <!-- Accent Background -->
+        <div class="jShowcase_group">
+            <span class="jShowcase_title">Accent Background</span>
+            <div class="jShowcase_items">
+                <QBtn color="primary" label="Accent Panel" @click="accentFull = true" />
+                <QBtn color="primary" label="Accent Header" @click="accentHeader = true" />
+            </div>
+        </div>
+
+        <QDialog v-model="accentFull">
+            <JPanel title="Warp Core Breach" icon="bolt" accent style="min-width: 380px;">
+                <div class="q-ma-md">
+                    Containment field failing in 60 seconds. Initiate emergency ejection procedure?
+                </div>
+                <template #footer>
+                    <QBtn class="ghost q-my-sm" label="Cancel" v-close-popup  />
+                    <QBtn color="negative q-my-sm" label="Eject" v-close-popup  />
+                </template>
+            </JPanel>
+        </QDialog>
+
+        <QDialog v-model="accentHeader">
+            <JPanel title="Navigation Alert" icon="explore" accent="header" style="min-width: 380px;">
+                <div class="q-ma-md">
+                    Course correction required. Recalculated route adds 4.2 hours to ETA.
+                </div>
+                <template #footer>
+                    <QBtn class="ghost q-my-sm" label="Ignore" v-close-popup />
+                    <QBtn color="primary q-my-sm" label="Apply" v-close-popup />
+                </template>
+            </JPanel>
+        </QDialog>
+
         <!-- Positions -->
         <div class="jShowcase_group">
             <span class="jShowcase_title">Positions</span>
@@ -216,13 +249,14 @@
 
 <script>
 import { QBtn, QDialog, QCard, QCardSection, QCardActions, QIcon, QSpace, QSeparator, QList, QItem, QItemSection, QItemLabel, QBadge, QInnerLoading, QSpinner, QInput, QSelect } from 'quasar';
+import JPanel from '../../../components/JPanel.vue';
 import QDialogApi from '../../definitions/Quasar/QDialog.json';
 
 export default {
     name: 'ShowcaseDialog',
     label: 'Quasar Dialog',
     icon: 'picture_in_picture',
-    components: { QBtn, QDialog, QCard, QCardSection, QCardActions, QIcon, QSpace, QSeparator, QList, QItem, QItemSection, QItemLabel, QBadge, QInnerLoading, QSpinner, QInput, QSelect },
+    components: { QBtn, QDialog, QCard, QCardSection, QCardActions, QIcon, QSpace, QSeparator, QList, QItem, QItemSection, QItemLabel, QBadge, QInnerLoading, QSpinner, QInput, QSelect, JPanel },
     apiJson: QDialogApi,
     importName: 'QDialog',
     importFrom: 'quasar',
@@ -233,6 +267,8 @@ export default {
             simple: false,
             card: false,
             persistent: false,
+            accentFull: false,
+            accentHeader: false,
             positioned: false,
             positionValue: 'top',
             maximized: false,

@@ -7,6 +7,9 @@
 }
 
 
+.varmoryBackgroundAccent {
+	background: var(--q-surface-1);
+}
 
 /* ── Panels — larger border-radius ─────────────────────── */
 
@@ -40,11 +43,12 @@
 	border-width: 1px !important;
 	transition: all 0.2s ease !important;
 	border-color: transparent !important;
-	box-shadow: 0 2px 8px color-mix(in srgb, var(--q-primary) 30%, transparent) !important;
+	box-shadow: 0px 0px 3px 2px color-mix(in srgb, var(--q-primary) 10%, transparent) !important;
 }
 
 .q-btn.q-btn--round {
 	border-radius: 50% !important;
+	box-shadow: none !important;
 }
 
 .q-btn.ghost {
@@ -53,7 +57,7 @@
 	background: transparent !important;
 }
 .q-btn.ghost:hover {
-	box-shadow: 0 2px 8px color-mix(in srgb, var(--q-primary) 30%, transparent) !important;
+	box-shadow: 0px 0px 2px 2px color-mix(in srgb, var(--q-primary) 10%, transparent) !important;
 	background: transparent !important;
 }
 .q-btn.ghost:hover .q-focus-helper {

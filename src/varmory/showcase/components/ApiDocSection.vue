@@ -8,20 +8,20 @@
         <template v-else-if="doc.apiData || (doc.importName && doc.importFrom)">
 
             <!-- Import -->
-            <div v-if="doc.importName && doc.importFrom" class="apiDocImport apiDocCopyable" @click="copy(importLine)">
-                <code><span class="apiDocImportKeyword">import</span> { {{ doc.importName }} } <span class="apiDocImportKeyword">from</span> <span class="apiDocImportString">'{{ doc.importFrom }}'</span>;</code>
+            <div v-if="!hideImport && doc.importName && doc.importFrom" class="apiDocImport">
+                <code v-for="name in importNames" :key="name" class="apiDocCopyable" @click="copy(`import { ${name} } from '${doc.importFrom}';`)"><span class="apiDocImportKeyword">import</span> { {{ name }} } <span class="apiDocImportKeyword">from</span> <span class="apiDocImportString">'{{ doc.importFrom }}'</span>;<br></code>
             </div>
 
             <!-- Props -->
-            <div v-if="doc.propsList.length" class="apiDocSection">
+            <div v-if="propsList.length" class="apiDocSection">
                 <div class="apiDocSectionHeader">
                     <QIcon name="tune" size="16px" />
                     <span>PROPS</span>
                 </div>
                 <div class="apiDocTable">
-                    <template v-for="(prop, idx) in doc.propsList" :key="prop.group + '/' + prop.name">
+                    <template v-for="(prop, idx) in propsList" :key="prop.group + '/' + prop.name">
                         <div
-                            v-if="hasGroups && prop.group && (idx === 0 || doc.propsList[idx - 1].group !== prop.group)"
+                            v-if="hasGroups && prop.group && (idx === 0 || propsList[idx - 1].group !== prop.group)"
                             class="apiDocGroupLabel apiDocCopyable"
                             @click="copy('&lt;' + prop.group + '&gt;')"
                         >{{ prop.group }}</div>
@@ -38,15 +38,15 @@
             </div>
 
             <!-- Slots -->
-            <div v-if="doc.slotsList.length" class="apiDocSection">
+            <div v-if="slotsList.length" class="apiDocSection">
                 <div class="apiDocSectionHeader">
                     <QIcon name="inventory_2" size="16px" />
                     <span>SLOTS</span>
                 </div>
                 <div class="apiDocTable">
-                    <template v-for="(slot, idx) in doc.slotsList" :key="slot.group + '/' + slot.name">
+                    <template v-for="(slot, idx) in slotsList" :key="slot.group + '/' + slot.name">
                         <div
-                            v-if="hasGroups && slot.group && (idx === 0 || doc.slotsList[idx - 1].group !== slot.group)"
+                            v-if="hasGroups && slot.group && (idx === 0 || slotsList[idx - 1].group !== slot.group)"
                             class="apiDocGroupLabel apiDocCopyable"
                             @click="copy('&lt;' + slot.group + '&gt;')"
                         >{{ slot.group }}</div>
@@ -59,15 +59,15 @@
             </div>
 
             <!-- Events -->
-            <div v-if="doc.eventsList.length" class="apiDocSection">
+            <div v-if="eventsList.length" class="apiDocSection">
                 <div class="apiDocSectionHeader">
                     <QIcon name="electric_bolt" size="16px" />
                     <span>EVENTS</span>
                 </div>
                 <div class="apiDocTable">
-                    <template v-for="(evt, idx) in doc.eventsList" :key="evt.group + '/' + evt.name">
+                    <template v-for="(evt, idx) in eventsList" :key="evt.group + '/' + evt.name">
                         <div
-                            v-if="hasGroups && evt.group && (idx === 0 || doc.eventsList[idx - 1].group !== evt.group)"
+                            v-if="hasGroups && evt.group && (idx === 0 || eventsList[idx - 1].group !== evt.group)"
                             class="apiDocGroupLabel apiDocCopyable"
                             @click="copy('&lt;' + evt.group + '&gt;')"
                         >{{ evt.group }}</div>
@@ -94,15 +94,32 @@ export default {
     name: 'ApiDocSection',
     components: { QIcon, QSpinnerOrbit },
     inject: ['__apiDoc', 'showcaseCopy'],
+    props: {
+        group: { type: String, default: null },
+        hideImport: { type: Boolean, default: false },
+    },
     computed: {
         doc() {
             return this.__apiDoc;
         },
+        propsList() {
+            return this.group ? this.doc.propsList.filter(p => p.group === this.group) : this.doc.propsList;
+        },
+        slotsList() {
+            return this.group ? this.doc.slotsList.filter(s => s.group === this.group) : this.doc.slotsList;
+        },
+        eventsList() {
+            return this.group ? this.doc.eventsList.filter(e => e.group === this.group) : this.doc.eventsList;
+        },
+        importNames() {
+            const n = this.doc.importName;
+            return Array.isArray(n) ? n : [n];
+        },
         importLine() {
-            return `import { ${this.doc.importName} } from '${this.doc.importFrom}';`;
+            return this.importNames.map(n => `import { ${n} } from '${this.doc.importFrom}';`).join('\n');
         },
         hasGroups() {
-            const all = [...this.doc.propsList, ...this.doc.slotsList, ...this.doc.eventsList];
+            const all = [...this.propsList, ...this.slotsList, ...this.eventsList];
             const groups = new Set(all.map(i => i.group).filter(Boolean));
             return groups.size > 1;
         },

@@ -6,10 +6,7 @@
 	--font-mono: 'JetBrains Mono', monospace;
 }
 
-
-/* ── PortfolioHeader ─────────────────────────────────────── */
-
-.portfolioHeader .portfolioHeader_frame {
+.varmoryBackgroundAccent {
 	border-width: 0px;
 	background:
 		/* molten cracks — jagged glowing fissures at irregular angles */
@@ -55,23 +52,30 @@
 			var(--q-surface-1) 50%,
 			color-mix(in srgb, var(--q-surface-1) 90%, black) 100%
 		);
-
 }
 
-.portfolioHeader.compact .portfolioHeader_frame {
-	background: none;
-	border-bottom-width: 1px;
-	border-color: var(--q-secondary);
-	border-image: linear-gradient(90deg, transparent 5%, var(--q-secondary) 30%, color-mix(in srgb, var(--q-surface-2) 50%, var(--q-secondary)) 50%, var(--q-secondary) 70%, transparent 95%) 1;
+.varmoryBackgroundAccent .varmoryBackgroundAccentContainer {
+	position: relative;
+	overflow: hidden;
 }
 
-.portfolioHeader .portfolioHeader_frame::before {
+.varmoryBackgroundAccent .varmoryBackgroundAccentContainer::before {
+	content: "";  
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 1px;
 	background: linear-gradient(90deg, transparent, var(--q-surface-2) 20%, var(--q-primary) 50%, var(--q-surface-2) 80%, transparent);
 	opacity: 0.9;
-
+}
+.varmoryBackgroundAccentCompact.varmoryBackgroundAccent .varmoryBackgroundAccentContainer::before {
+	top: auto;
+	bottom: 0;	
+	background: linear-gradient(90deg, transparent, var(--q-surface-border) 10%, var(--q-surface-border) 90%, transparent);
 }
 
-.portfolioHeader .portfolioHeader_frame::after {
+.varmoryBackgroundAccent .varmoryBackgroundAccentContainer::after {
 	width: 100%;
 	height: 100%;
 	top: 0;
@@ -83,40 +87,6 @@
 		radial-gradient(circle 500px at 15% 35%, color-mix(in srgb, var(--q-secondary) 10%, transparent) 0%, transparent 100%),
 		radial-gradient(circle 300px at 25% 75%, color-mix(in srgb, var(--q-accent) 8%, transparent) 0%, transparent 100%),
 		radial-gradient(circle 750px at 50% 50%, color-mix(in srgb, var(--q-secondary) 5%, transparent) 0%, transparent 100%);
-
 }
 
-.portfolioHeader .portfolioHeader_corner {
-	border-color: var(--q-secondary);
-}
-
-.portfolioHeader .portfolioHeader_tag {
-	color: var(--q-secondary);
-}
-
-.portfolioHeader .portfolioHeader_tagDot {
-	background: var(--q-secondary);
-	box-shadow: 0 0 4px var(--q-secondary), 0 0 12px color-mix(in srgb, var(--q-secondary) 60%, transparent);
-}
-
-
-/* ── PortfolioFooter ─────────────────────────────────────── */
-
-.portfolioFooter .portfolioFooter_frame {
-	border-color: var(--q-secondary);
-	border-image: linear-gradient(90deg, transparent 5%, var(--q-secondary) 30%, color-mix(in srgb, var(--q-surface-2) 50%, var(--q-secondary)) 50%, var(--q-secondary) 70%, transparent 95%) 1;
-}
-
-.portfolioFooter .portfolioFooter_tag {
-	color: var(--q-secondary);
-}
-
-.portfolioFooter .portfolioFooter_tagDot {
-	background: var(--q-secondary);
-	box-shadow: 0 0 4px var(--q-secondary), 0 0 12px color-mix(in srgb, var(--q-secondary) 60%, transparent);
-}
-
-.portfolioFooter .portfolioFooter_divider {
-	background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--q-secondary) 20%, transparent) 20%, color-mix(in srgb, var(--q-accent) 15%, transparent) 80%, transparent);
-}
 

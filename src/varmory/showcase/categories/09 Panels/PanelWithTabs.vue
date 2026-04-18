@@ -1,10 +1,23 @@
 <template>
     <JPanel
         icon-color="var(--q-info)"
-        footer-text="Last updated: just now"
+        footer-text="Last updated: now"
+        :accent="selectedAccent"
     >
         <template #footer>
-            <QCheckbox v-model="inlineLabel" label="Inline Label" color="primary" />
+            <div class="row items-center q-gutter-md justify-end">
+                <QCheckbox v-model="inlineLabel" label="Inline" color="primary" />
+                <QSelect
+                    v-model="selectedAccent"
+                    :options="accentOptions"
+                    label="Accent"
+                    dense
+                    outlined
+                    emit-value
+                    map-options
+                    style="min-width: 140px;"
+                />
+            </div>
         </template>
         <template #header>
         <QTabs v-model="tab" dense no-caps 
@@ -17,7 +30,8 @@
             <QTab name="logs" icon="description" label="Logs" alert="warning" />
         </QTabs>
         </template>
-        <QTabPanels v-model="tab" animated 
+        <QTabPanels v-model="tab" 
+          animated 
           transition-prev="fade"
           transition-next="fade">
             <QTabPanel name="overview">
@@ -41,17 +55,23 @@
 </template>
 
 <script>
-import { QCheckbox, QTabs, QTab, QTabPanels, QTabPanel } from 'quasar';
+import { QCheckbox, QSelect, QTabs, QTab, QTabPanels, QTabPanel } from 'quasar';
 import JPanel from '../../../components/JPanel.vue';
 import JPanelApi from '../../definitions/Custom/JPanel.json';
 
 export default {
     name: 'ShowcasePanelWithTabs',
     order: 1,
-    components: { JPanel, QCheckbox, QTabs, QTab, QTabPanels, QTabPanel },
+    components: { JPanel, QCheckbox, QSelect, QTabs, QTab, QTabPanels, QTabPanel },
     data: () => ({
         tab: 'overview',
         inlineLabel: false,
+        selectedAccent: false,
+        accentOptions: [
+            { label: 'false', value: false },
+            { label: 'true', value: true },
+            { label: 'header', value: 'header' },
+        ],
     }),
     label: 'Panel with Tabs',
     icon: 'dashboard',

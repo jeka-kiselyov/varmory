@@ -45,7 +45,7 @@ Use flexbox. Quasar's grid classes (`row`, `col-*`, `q-gutter-*`, `q-pa-*`, `q-m
 
 **Flex row with wrapping:**
 ```html
-<div style="display: flex; flex-wrap: wrap; gap: var(--q-gap-sm); align-items: center;">
+<div class="row items-center q-gutter-sm">
 	<QBtn label="One" />
 	<QBtn label="Two" />
 </div>
@@ -69,11 +69,23 @@ Use flexbox. Quasar's grid classes (`row`, `col-*`, `q-gutter-*`, `q-pa-*`, `q-m
 </JPanel>
 ```
 
-Props: `title`, `icon`, `iconColor`, `footerText`, `square`, `fullscreen`, `scroll`
-Slots: `default`, `title`, `header`, `header-action`, `footer`
+By default, JPanel applies no padding to its content (so you can drop wide components like QTabPanels directly inside). You'll usually want to add margin to the content yourself:
 
 ```html
-<JPanel title="Actions">
+<JPanel title="Users" icon="people" footer-text="3 results">
+	<div class="q-ma-md">
+		Content
+	</div>
+</JPanel>
+```
+
+Props: `title`, `icon`, `iconColor`, `accent`, `footerText`, `square`, `fullscreen`, `scroll`
+Slots: `default`, `title`, `header`, `header-action`, `footer`
+
+Use the `accent` prop to give the panel a themed background so it stands out from the surrounding layout. See [AccentBackground.md](./AccentBackground.md) for details and the underlying `varmoryBackgroundAccent` CSS hook.
+
+```html
+<JPanel title="Actions" accent>
 	<template #header-action>
 		<QBtn flat round icon="refresh" size="sm" />
 	</template>

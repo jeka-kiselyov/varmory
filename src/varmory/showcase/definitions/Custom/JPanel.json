@@ -20,6 +20,12 @@
       "desc": "CSS color value for the header icon.",
       "category": "style"
     },
+    "accent": {
+      "type": ["Boolean", "String"],
+      "default": "false",
+      "desc": "Styled ( by theme ) panel background or panel header background (false, true, 'header')",
+      "category": "style"
+    },
     "footer-text": {
       "type": "String",
       "default": "null",

@@ -1,0 +1,40 @@
+{
+  "type": "component",
+  "meta": { "docsUrl": "https://v2.quasar.dev/vue-components/range" },
+  "props": {
+    "model-value": { "type": ["Object", "null"], "default": "{ min: null, max: null }", "desc": "Model of the component of type { min, max } (both values must be between global min/max); use v-model", "required": true, "category": "model" },
+    "min": { "type": "Number", "default": "0", "desc": "Minimum value of the model", "category": "model" },
+    "max": { "type": "Number", "default": "100", "desc": "Maximum value of the model", "category": "model" },
+    "step": { "type": "Number", "default": "1", "desc": "Step amount between valid values (> 0.0); 0 defines infinite granularity", "category": "model" },
+    "snap": { "type": "Boolean", "desc": "Snap on valid values, rather than sliding freely", "category": "behavior" },
+    "reverse": { "type": "Boolean", "desc": "Work in reverse (changes direction)", "category": "behavior" },
+    "vertical": { "type": "Boolean", "desc": "Display in vertical direction", "category": "behavior" },
+    "color": { "type": "String", "desc": "Color name from the Quasar Color Palette", "category": "style" },
+    "track-color": { "type": "String", "desc": "Color name for the track", "category": "style" },
+    "label": { "type": "Boolean", "desc": "Popup a label when user clicks/taps on the slider thumb", "category": "content" },
+    "label-always": { "type": "Boolean", "desc": "Always display the label", "category": "content" },
+    "markers": { "type": ["Boolean", "Number"], "desc": "Display markers on the track", "category": "content" },
+    "drag-range": { "type": "Boolean", "desc": "User can drag range instead of just the two thumbs", "category": "content" },
+    "drag-only-range": { "type": "Boolean", "desc": "User can drag only the range instead and NOT the two thumbs", "category": "content" },
+    "left-label-value": { "type": ["String", "Number"], "desc": "Override default label for min value", "category": "labels" },
+    "right-label-value": { "type": ["String", "Number"], "desc": "Override default label for max value", "category": "labels" },
+    "left-label-color": { "type": "String", "desc": "Color name for left label background", "category": "labels" },
+    "right-label-color": { "type": "String", "desc": "Color name for right label background", "category": "labels" },
+    "left-thumb-color": { "type": "String", "desc": "Color name for left thumb", "category": "labels" },
+    "right-thumb-color": { "type": "String", "desc": "Color name for right thumb", "category": "labels" },
+    "track-size": { "type": "String", "default": "'4px'", "desc": "Track size (including CSS unit)", "category": "style" },
+    "thumb-size": { "type": "String", "default": "'20px'", "desc": "Thumb size (including CSS unit)", "category": "style" },
+    "dense": { "type": "Boolean", "desc": "Dense mode; occupies less space", "category": "style" },
+    "disable": { "type": "Boolean", "desc": "Put component in disabled mode", "category": "state" },
+    "readonly": { "type": "Boolean", "desc": "Put component in readonly mode", "category": "state" },
+    "dark": { "type": ["Boolean", "null"], "default": "null", "desc": "Notify the component that the background is a dark color", "category": "style" }
+  },
+  "slots": {
+    "marker-label": { "desc": "Custom marker label slot" }
+  },
+  "events": {
+    "update:model-value": { "desc": "Emitted when the component needs to change the model; used by v-model" },
+    "change": { "desc": "Emitted on lazy model value change (after user releases the thumb)" },
+    "pan": { "desc": "Triggered when user starts/ends panning on the component" }
+  }
+}

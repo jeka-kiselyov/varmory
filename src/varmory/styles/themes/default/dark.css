@@ -35,7 +35,3 @@
 	--q-shadow-drop: color-mix(in srgb, black 50%, transparent);
 	--q-shadow-inset: color-mix(in srgb, black 25%, transparent);
 }
-
-.jPanel.fullscreen {
-	background: linear-gradient(170deg, #0e1117 0%, #121820 40%, #0f151d 70%, #111820 100%);
-}

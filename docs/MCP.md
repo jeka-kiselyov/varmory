@@ -12,6 +12,12 @@ https://varmory-dec8b20a1b83.herokuapp.com/mcp
 
 Transport: Streamable HTTP.
 
+```bash
+claude mcp add --transport http varmory https://varmory-dec8b20a1b83.herokuapp.com/mcp
+```
+
+Once added, you can simply ask Claude to build any web app using varmory, e.g. "Build me a to-do app using Varmory". Claude will discover available components, docs, and API definitions through the MCP server automatically.
+
 To launch MCP server of your own set of components/DOC files, set up the MCP server ( or use the one defined in `mcp/server.js` that hosts both MCP and Component Showcase app ).
 
 ## Quick Start

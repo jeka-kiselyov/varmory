@@ -1,30 +1,43 @@
 <template>
-    <div class="jPanel" :class="{jPanel_square: square, fullscreen: fullscreen}">
-        <div class="jPanel_header" v-if="title || $slots.title || icon || $slots.header || $slots['header-action']">
-            <div class="jPanel_title q-pa-md non-selectable" v-if="title || icon || $slots['title']">
-                <QIcon v-if="icon" :name="icon" size="14px" class="jPanel_icon" :style="{ color: iconColor }" />
-                <slot name="title">
-                    <span>{{ title }}</span>
-                </slot>
-            </div>
-            <div class="jPanel_headerSlot" v-if="$slots['header']">
-                <slot name="header" />
-            </div>
-            <div class="jPanel_headerAction q-pa-md" v-if="$slots['header-action']">
-                <slot name="header-action" />
+    <div class="jPanel" :class="{jPanel_square: square, fullscreen: fullscreen, varmoryBackgroundAccent: (accent === true), jPanel_accentedHeader: (accent == 'header')}">
+        <div :class="{varmoryBackgroundAccentContainer: (accent === true)}">
+
+        <div v-if="title || $slots.title || icon || $slots.header || $slots['header-action']"
+            :class="{varmoryBackgroundAccent: (accent === 'header')}" >
+            <div :class="{varmoryBackgroundAccentContainer: (accent === 'header')}">
+
+                <div class="jPanel_header" 
+                    >
+                    <div class="jPanel_title q-pa-md non-selectable" v-if="title || icon || $slots['title']">
+                        <QIcon v-if="icon" :name="icon" size="14px" class="jPanel_icon" :style="{ color: iconColor }" />
+                        <slot name="title">
+                            <span>{{ title }}</span>
+                        </slot>
+                    </div>
+                    <div class="jPanel_headerSlot" v-if="$slots['header']">
+                        <slot name="header" />
+                    </div>
+                    <div class="jPanel_headerAction q-pa-md" v-if="$slots['header-action']">
+                        <slot name="header-action" />
+                    </div>
+                </div>
+
             </div>
         </div>
 
         <div v-if="scroll" class="jPanel_scroll">
             <slot />
         </div>
-        <div v-else>
+        <div v-else class="jPanel_content">
             <slot />
         </div>
 
         <div class="jPanel_footer q-px-md q-py-xs" v-if="$slots.footer || footerText">
             <span class="jPanel_footerText" v-if="footerText">{{ footerText }}</span>
             <slot name="footer" />
+        </div>
+        <div v-else class="jPanel_footer">
+        </div>
         </div>
     </div>
 </template>
@@ -64,19 +77,57 @@ export default {
             type: Boolean,
             default: false,
         },
+        accent: {
+            type: [Boolean, String],
+            default: false,
+        },
     },
 };
 </script>
 
 <style scoped>
 .jPanel {
-    background: var(--q-panel-gradient);
-    border: 1px solid var(--q-surface-border);
     border-radius: 4px;
     overflow: hidden;
     color: var(--q-text);
     display: flex;
     flex-direction: column;
+}
+
+.jPanel > div {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+.jPanel:not(.varmoryBackgroundAccent, .jPanel_accentedHeader) {
+    border: 1px solid var(--q-surface-border);
+}
+.jPanel:not(.varmoryBackgroundAccent) {
+    background: var(--q-panel-gradient);
+}
+
+.jPanel.jPanel_accentedHeader .jPanel_footer
+ {
+    border: 1px solid var(--q-surface-border);
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-top: none;
+}
+
+.jPanel.jPanel_accentedHeader .jPanel_scroll, .jPanel.jPanel_accentedHeader .jPanel_content
+{
+    border: 1px solid var(--q-surface-border);
+    border-bottom: none;
+    border-top: none;
+}
+
+.jPanel :deep(.q-tab-panels) {
+    background: transparent !important;
+}
+
+.jPanel :deep(.q-panel) {
+    background: transparent !important;
 }
 
 .jPanel.fullscreen {

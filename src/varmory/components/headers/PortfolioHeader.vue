@@ -1,6 +1,9 @@
 <template>
-    <div class="portfolioHeader" :class="{ compact: !alwaysExpanded && (alwaysCollapsed || scrolled) }">
-        <div class="portfolioHeader_frame">
+    <div class="portfolioHeader varmoryBackgroundAccent" :class="{ 
+        compact: (!alwaysExpanded && (alwaysCollapsed || scrolled)),
+        varmoryBackgroundAccentCompact: (!alwaysExpanded && (alwaysCollapsed || scrolled))
+     }">
+        <div class="portfolioHeader_frame varmoryBackgroundAccentContainer">
             <div class="portfolioHeader_corner portfolioHeader_cornerTl"></div>
             <div class="portfolioHeader_corner portfolioHeader_cornerTr"></div>
             <div class="portfolioHeader_corner portfolioHeader_cornerBl"></div>
@@ -117,17 +120,9 @@ export default {
 
 .portfolioHeader_frame {
     position: relative;
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 4px;
     padding: 24px 28px;
     overflow: hidden;
     transition: padding 0.3s ease, border-radius 0.3s ease;
-
-
-	background: var(--q-panel-gradient);
-	border-color: var(--q-surface-border);
-	border-image: linear-gradient(180deg, var(--q-primary), color-mix(in srgb, var(--q-primary) 25%, transparent)) 1;
 }
 
 .compact .portfolioHeader_frame {
@@ -137,44 +132,9 @@ export default {
     border-right: none;
     border-top: none;
     backdrop-filter: blur(16px);
-
-	background: var(--q-panel-compact-gradient);
 	border-image: none;
 }
 
-/* ::before — top highlight line */
-
-.portfolioHeader_frame::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    opacity: 0.6;
-
-    background: linear-gradient(90deg, transparent 10%, color-mix(in srgb, var(--q-primary) 50%, transparent) 30%, var(--q-primary) 50%, color-mix(in srgb, var(--q-primary) 50%, transparent) 70%, transparent 90%);
-}
-
-/* ::after — radial glow, top-right */
-
-.portfolioHeader_frame::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 200px;
-    height: 200px;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-
-	background: radial-gradient(circle, color-mix(in srgb, var(--q-primary) 11%, transparent) 0%, transparent 70%);
-}
-
-
-.compact .portfolioHeader_frame::after {
-    opacity: 0;
-}
 
 /* ── Corners — decorative L-shaped border accents ───────── */
 

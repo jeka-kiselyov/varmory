@@ -124,7 +124,7 @@ export default {
     border: 1px solid var(--q-surface-border);
     border-radius: 4px;
     padding: 14px 18px;
-    margin: 8px 0 16px;
+    margin: 0;
     overflow-x: auto;
 }
 
