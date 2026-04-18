@@ -18,17 +18,43 @@ npm install vue@^3 quasar@^2 pinia@^3 @quasar/extras@^1
 
 ## Setup
 
+Quasar components are registered by `@quasar/vite-plugin` in your Vite config:
+
 ```js
+// vite.config.js
+import vue from '@vitejs/plugin-vue';
+import { quasar, transformAssetUrls } from '@quasar/vite-plugin';
+
+export default {
+	plugins: [
+		vue({ template: { transformAssetUrls } }),
+		quasar({ autoImportComponentCase: 'pascal' }),
+	],
+};
+```
+
+In your app's entry file, install varmory as a Vue plugin alongside Pinia, import Quasar's base CSS and icons, and pass any Quasar plugins you need:
+
+```js
+// main.js
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import { install as Varmory } from 'varmory';
+import { Dialog, Notify, LocalStorage, SessionStorage } from 'quasar';
+import 'quasar/dist/quasar.css';
+import '@quasar/extras/material-icons/material-icons.css';
+import App from './App.vue';
 
-const app = createApp(App);
-app.use(createPinia());
-app.use(Varmory, {
-	theme: 'space', // optional. Default is 'default'
-});
+createApp(App)
+	.use(createPinia())
+	.use(Varmory, {
+		theme: 'space', // optional, default is 'default'
+		plugins: { Notify, Dialog, LocalStorage, SessionStorage },
+	})
+	.mount('#app');
 ```
+
+See [USAGE.md](docs/USAGE.md) for more setup options (including attaching Quasar yourself instead of via varmory).
 
 ## Docs
 
