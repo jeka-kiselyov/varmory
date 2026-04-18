@@ -4,6 +4,9 @@ Vue 3 + Quasar component showcase library with multi-theme support and an MCP se
 
 Drop in an interactive component browser, expose your components to AI via the Model Context Protocol, and ship with built-in theming — dark/light mode, multiple themes, or bring your own.
 
+- [Component Showcase](https://varmory-dec8b20a1b83.herokuapp.com/)
+- [MCP Server](https://varmory-dec8b20a1b83.herokuapp.com/#docs/MCP)
+
 ## Installation
 
 ```bash
