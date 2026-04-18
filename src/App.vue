@@ -17,23 +17,12 @@
 		<PortfolioFooter title="vArmory" class="q-pa-sm q-mt-xl">
 			<template #expanded>
 				<div class="footerColumn">
-					<span class="footerColumnHeading">Platform</span>
-					<a class="footerLink" href="#">Dashboard</a>
-					<a class="footerLink" href="#">Portfolio</a>
-					<a class="footerLink" href="#">Staking</a>
-					<a class="footerLink" href="#">Swap</a>
+					<span class="footerColumnHeading">Code</span>
+					<a class="footerLink" href="https://github.com/jeka-kiselyov/varmory">GitHub</a>
 				</div>
 				<div class="footerColumn">
 					<span class="footerColumnHeading">Resources</span>
-					<a class="footerLink" href="#">Documentation</a>
-					<a class="footerLink" href="#">API Reference</a>
-					<a class="footerLink" href="#">Status Page</a>
-				</div>
-				<div class="footerColumn">
-					<span class="footerColumnHeading">Community</span>
-					<a class="footerLink" href="#">Discord</a>
-					<a class="footerLink" href="#">Twitter</a>
-					<a class="footerLink" href="#">GitHub</a>
+					<a class="footerLink" href="https://varmory-dec8b20a1b83.herokuapp.com/#docs/README">Documentation</a>
 				</div>
 			</template>
 			<template #bottom>
