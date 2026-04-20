@@ -69,7 +69,10 @@ function mergeCategories(components) {
         const arr = Array.isArray(items) ? items : [items];
         if (!merged[cat]) merged[cat] = [];
         for (const item of arr) {
-            merged[cat].push(normalizeItem(item));
+            const normalized = normalizeItem(item);
+            const existingIdx = merged[cat].findIndex(i => i.name === normalized.name);
+            if (existingIdx >= 0) merged[cat][existingIdx] = normalized;
+            else merged[cat].push(normalized);
         }
         merged[cat].sort((a, b) => a.order - b.order);
     }

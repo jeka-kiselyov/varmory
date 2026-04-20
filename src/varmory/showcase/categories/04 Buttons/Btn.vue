@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import QBtnApi from '../../definitions/Quasar/QBtn.json';
+import QBtnApi from 'quasar/src/components/btn/QBtn.json';
 import { QBtn } from 'quasar';
 
 export default {

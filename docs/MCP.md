@@ -53,50 +53,78 @@ The core export. Takes an MCP server instance, attaches resources and tools, and
 
 ```js
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import attachShowcase from './mcp/showcaseMcp.js';
+import attachShowcase from 'varmory/mcp';
 
 const server = new McpServer({ name: 'my-server', version: '1.0.0' });
-attachShowcase(server);
+// rootDir must be provided — otherwise no filesystem scanning happens.
+attachShowcase(server, { rootDir: './node_modules/varmory' });
 ```
 
 ### Options
 
-| Option | Type | Description |
-|--------|------|-------------|
-| `rootDir` | `string` | Absolute path to the library root. Defaults to one level up from the mcp/ directory. |
-| `files` | `string[]` | Explicit list of file paths. Files are auto-classified by extension (see below). |
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `rootDir` | `string` | — | Absolute path to a library root with the expected layout (see below). When omitted, **no filesystem scanning happens** — only `files` are loaded. |
+| `files` | `string[]` | `[]` | Extra file paths on top of whatever `rootDir` produced. Classified by extension. |
+| `quasar` | `boolean` | `true` | When `false`, Quasar's component JSONs and its mixin/`extends` resolver data are **not** auto-loaded from `node_modules`. Definitions you pass via `files` still pass through the normalizer, they just won't have access to Quasar's shared `extends` / mixin pool. |
+| `maxDepth` | `number` | `5` | How deep the recursive search for `categories/` and `definitions/` folders goes under `rootDir`. Depth 0 is `rootDir` itself. |
 
-When both `rootDir` and `files` are provided, the file list is merged on top of the auto-discovered content.
+Files from `files` are merged **after** `rootDir` scanning, so `files` overrides same-named docs/definitions.
 
-When only `files` is provided, no auto-discovery happens — only the listed files are loaded.
+### Filesystem layout expected at `rootDir`
+
+```
+<rootDir>/
+    README.md
+    docs/*.md
+    **/categories/<NN Name>/*.vue        (any folder named `categories` under
+                                          rootDir, recursive — `node_modules`,
+                                          `.git`, `dist`, `build` are skipped)
+    **/definitions/<Vendor>/*.json       (any folder named `definitions`)
+    node_modules/quasar/src/…            (optional; picked up when `quasar` is
+                                          not false)
+```
+
+Category folders may carry a numeric prefix like `04 Buttons` — the prefix is stripped for display, so the category becomes `Buttons`. You can keep categories/definitions wherever fits your project layout — the scanner just looks for folders literally named `categories` or `definitions`.
 
 ### File classification
 
-Files passed via the `files` option are classified by extension:
+Every file (from `rootDir` scan and from `files`) is routed by extension:
 
-- `.vue` — parsed as showcase components. Grouped into categories by parent folder name (numeric prefixes stripped, e.g. `04 Buttons/Btn.vue` → category "Buttons").
-- `.md` — loaded as doc pages. The filename without extension becomes the page name (`README.md` → `README`).
-- `.json` — loaded as API definitions in Quasar docs format.
+- `.vue` — parsed as a showcase component. Grouped into categories by parent folder name (numeric prefix stripped).
+- `.md` — loaded as a doc page. Filename without extension becomes the page name (`README.md` → `README`).
+- `.json` — loaded as an API definition keyed by filename.
+
+### API definition normalization
+
+Every loaded `.json` definition is piped through `normalizeQuasarApi`, which:
+
+- resolves `"extends": "<name>"` entries against Quasar's `api.extends.json` (the shared pool of `color`, `dark`, `dense`, …)
+- merges props/slots/events/methods contributed by `mixins` listed on the component (composables like `use-size`, `use-form`, or component-local ones like `components/btn/use-btn`)
+- tags inherited entries with `_mixin: <short-name>` so `get_api` output can show `_[inherited: use-btn]_`
+- sorts entries: **required → own → inherited**
+
+Hand-written JSONs without `mixins`/`extends` short-circuit and pass through untouched.
 
 ### Examples
 
 ```js
-// Auto-discover everything from default location
-attachShowcase(server);
-
-// Point to a specific root
-attachShowcase(server, { rootDir: '/path/to/varmory' });
-
-// Explicit files only
+// No auto-discovery — only the listed files
 attachShowcase(server, {
     files: [
         'src/showcase/categories/04 Buttons/Btn.vue',
-        'docs/THEMING.md',
+        'docs/USAGE.md',
         'definitions/QBtn.json',
     ],
 });
 
-// Auto-discover + extra files merged on top
+// Full library scan (rootDir + Quasar src by default)
+attachShowcase(server, { rootDir: '/path/to/varmory' });
+
+// Library scan without Quasar auto-loading
+attachShowcase(server, { rootDir: '/path/to/lib', quasar: false });
+
+// Root scan + extra files merged on top
 attachShowcase(server, {
     rootDir: '/path/to/lib',
     files: ['extra/MyWidget.vue', 'extra/GUIDE.md'],
@@ -119,7 +147,7 @@ attachShowcase(server, {
 | `search_components` | `query: string` | Fuzzy search across component names and labels |
 | `search_docs` | `query: string` | Search documentation pages by name or content |
 | `get_component` | `name: string` | Returns a component's template code, category, and import info |
-| `get_api` | `name: string` | Returns a component's API definition (props, slots, events) |
+| `get_api` | `name: string` | Returns a component's full API: props (with `default`/`values`/required flag/inherited tag), slots (with scope props), events (with payload params), and methods (with params + returns). |
 | `get_doc` | `name: string` | Returns the full markdown content of a doc page |
 
 All tools are annotated as read-only, non-destructive, and idempotent.

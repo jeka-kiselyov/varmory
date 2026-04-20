@@ -1,26 +1,26 @@
 <template>
     <div class="showcaseMain">
-        <JPanel
-            :title="item?.label || 'COMPONENT'"
-            icon="widgets"
-            icon-color="var(--q-accent)"
-        >
+        <QCard class="showcaseCard" flat>
+            <div class="showcaseMain_header">
+                <QIcon name="widgets" size="14px" color="accent" />
+                <span>{{ item?.label || 'COMPONENT' }}</span>
+            </div>
             <div v-if="item" class="showcaseMain_content">
                 <component :is="item.component" />
             </div>
             <div v-else class="showcaseMain_empty">
                 Select a component from the sidebar
             </div>
-        </JPanel>
+        </QCard>
     </div>
 </template>
 
 <script>
-import JPanel from '../../components/JPanel.vue';
+import { QCard, QIcon } from 'quasar';
 
 export default {
     name: 'ShowcaseMain',
-    components: { JPanel },
+    components: { QCard, QIcon },
     props: {
         item: {
             type: Object,
@@ -33,6 +33,20 @@ export default {
 <style scoped>
 .showcaseMain {
     min-width: 0;
+}
+
+.showcaseMain_header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    font-family: var(--font-display, inherit);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    color: inherit;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+    user-select: none;
 }
 
 .showcaseMain_content {
@@ -98,12 +112,12 @@ export default {
 .showcaseMain_content .jShowcase_info {
     font-family: var(--font-body);
     font-size: 13px;
-    color: var(--q-text);
+    color: inherit;
     line-height: 1.6;
     margin-bottom: 12px;
     padding: 16px 20px;
-    background: color-mix(in srgb, var(--q-surface-2) 50%, transparent);
-    border: 1px solid var(--q-surface-border);
+    background: color-mix(in srgb, currentColor 4%, transparent);
+    border: 1px solid color-mix(in srgb, currentColor 15%, transparent);
     border-radius: 4px;
 }
 

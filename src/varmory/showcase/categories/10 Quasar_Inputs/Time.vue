@@ -32,7 +32,7 @@
 
 <script>
 import { QTime } from 'quasar';
-import QTimeApi from '../../definitions/Quasar/QTime.json';
+import QTimeApi from 'quasar/src/components/time/QTime.json';
 
 export default {
     name: 'ShowcaseQuasarTime',

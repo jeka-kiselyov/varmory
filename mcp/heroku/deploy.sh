@@ -35,6 +35,11 @@ mkdir -p "$TMPDIR/src/varmory/showcase"
 cp -r "$ROOT/src/varmory/showcase/categories" "$TMPDIR/src/varmory/showcase/categories"
 cp -r "$ROOT/src/varmory/showcase/definitions" "$TMPDIR/src/varmory/showcase/definitions"
 
+# Copy the normalizer module that showcaseMcp.js imports
+mkdir -p "$TMPDIR/src/varmory/includes"
+cp "$ROOT/src/varmory/includes/normalizeQuasarApi.js" "$TMPDIR/src/varmory/includes/"
+cp "$ROOT/src/varmory/includes/package.json" "$TMPDIR/src/varmory/includes/"
+
 # Create root package.json for Heroku
 cat > "$TMPDIR/package.json" << 'PKGJSON'
 {
@@ -52,6 +57,7 @@ cat > "$TMPDIR/package.json" << 'PKGJSON'
     "@fastify/static": "^8.1.0",
     "@modelcontextprotocol/sdk": "^1.12.1",
     "fastify": "^5.3.0",
+    "quasar": "^2.19.2",
     "zod": "^3.25.0"
   }
 }

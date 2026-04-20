@@ -1,11 +1,13 @@
 # varmory
 
-Vue 3 + Quasar component showcase library with multi-theme support and an MCP server for AI agents.
+Component showcase for Vue 3 + Quasar apps, with a Model Context Protocol server so AI agents can read your components and docs.
 
-Drop in an interactive component browser, expose your components to AI via the Model Context Protocol, and ship with built-in theming — dark/light mode, multiple themes, or bring your own.
+Drop in an interactive browser for the Quasar components you use and any custom ones you build, and expose the same metadata to tools like Claude via MCP — no extra glue needed.
 
 - [Component Showcase](https://varmory-dec8b20a1b83.herokuapp.com/)
 - [MCP Server](https://varmory-dec8b20a1b83.herokuapp.com/#docs/MCP)
+
+> See [**themed_varmory**](https://github.com/jeka-kiselyov/themed_varmory) for a reference example of using varmory as a base to build your own themed component library — swappable themes, a theme store, custom components, and an extended showcase.
 
 ## Installation
 
@@ -16,7 +18,7 @@ npm install varmory
 Peer dependencies:
 
 ```bash
-npm install vue@^3 quasar@^2 pinia@^3 @quasar/extras@^1
+npm install vue@^3 quasar@^2 @quasar/extras@^1
 ```
 
 ## Setup
@@ -36,33 +38,28 @@ export default {
 };
 ```
 
-In your app's entry file, install varmory as a Vue plugin alongside Pinia, import Quasar's base CSS and icons, and pass any Quasar plugins you need:
+In your app's entry file, attach Quasar to the Vue app **before** Varmory, then install Varmory as a Vue plugin. Varmory registers `JComponentShowcase` + `JComponentShowcaseWithContent` globally and throws if Quasar isn't already installed.
 
 ```js
 // main.js
 import { createApp } from 'vue';
-import { createPinia } from 'pinia';
-import { install as Varmory } from 'varmory';
-import { Dialog, Notify, LocalStorage, SessionStorage } from 'quasar';
+import { Quasar, Notify, Dialog, LocalStorage, SessionStorage } from 'quasar';
+import { Varmory } from 'varmory';
 import 'quasar/dist/quasar.css';
 import '@quasar/extras/material-icons/material-icons.css';
 import App from './App.vue';
 
 createApp(App)
-	.use(createPinia())
-	.use(Varmory, {
-		theme: 'space', // optional, default is 'default'
-		plugins: { Notify, Dialog, LocalStorage, SessionStorage },
-	})
+	.use(Quasar, { plugins: { Notify, Dialog, LocalStorage, SessionStorage } })
+	.use(Varmory)
 	.mount('#app');
 ```
 
-See [USAGE.md](docs/USAGE.md) for more setup options (including attaching Quasar yourself instead of via varmory).
+See [USAGE.md](https://varmory-dec8b20a1b83.herokuapp.com/#docs/USAGE) for the rest of the setup details.
 
 ## Docs
 
-- [Usage](https://varmory-dec8b20a1b83.herokuapp.com/#docs/USAGE) — setting up a fresh app using varmory for UI, Vite config, and Quasar plugin setup
-- [Building Components](https://varmory-dec8b20a1b83.herokuapp.com/#docs/CustomComponents) — API style, CSS variables, layout patterns, component composition, and styling conventions
-- [Theming](https://varmory-dec8b20a1b83.herokuapp.com/#docs/THEMING) — built-in themes, custom themes, writing your own, theme store API, and UI components
-- [Showcase](https://varmory-dec8b20a1b83.herokuapp.com/#docs/SHOWCASE) — interactive component browser, adding categories, custom docs, writing showcase entries, and navigation
-- [MCP Server](https://varmory-dec8b20a1b83.herokuapp.com/#docs/MCP) — expose showcase data to AI agents via the Model Context Protocol
+- [Usage](https://varmory-dec8b20a1b83.herokuapp.com/#docs/USAGE) — setting up a fresh app, Vite config, Quasar plugin wiring
+- [Building Components](https://varmory-dec8b20a1b83.herokuapp.com/#docs/CustomComponents) — API style, layout patterns, component composition
+- [Showcase](https://varmory-dec8b20a1b83.herokuapp.com/#docs/SHOWCASE) — interactive browser, adding categories, custom docs, navigation
+- [MCP Server](https://varmory-dec8b20a1b83.herokuapp.com/#docs/MCP) — expose showcase + docs + component APIs to AI agents via MCP

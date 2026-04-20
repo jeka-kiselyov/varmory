@@ -1,46 +1,18 @@
 <template>
 	<div>
 		
-		<PortfolioHeader  class="q-pa-sm" title="vArmory" alwaysCollapsed>
-			<template #collapsed>
-				<span class="appHeaderThemeLabel">Theme:</span>
-					<JThemeSwitcher  outlined dense  />
-			</template>
-			<template #right>
-				<JDarkSwitcher />
-				<QBtn @click="test" label="Test" />
-			</template>
-		</PortfolioHeader>
+		<Header />
 
 		<JComponentShowcaseWithContent :components="components" />
 
-		<PortfolioFooter title="vArmory" class="q-pa-sm q-mt-xl">
-			<template #expanded>
-				<div class="footerColumn">
-					<span class="footerColumnHeading">Code</span>
-					<a class="footerLink" href="https://github.com/jeka-kiselyov/varmory">GitHub</a>
-				</div>
-				<div class="footerColumn">
-					<span class="footerColumnHeading">Resources</span>
-					<a class="footerLink" href="https://varmory-dec8b20a1b83.herokuapp.com/#docs/README">Documentation</a>
-				</div>
-			</template>
-			<template #bottom>
-				<div class="text-center">
-					&copy; <JCurrentYear /> vArmory
-				</div>
-			</template>
-		</PortfolioFooter>
+		<Footer />
 	</div>
 </template>
   
 <script>
-import { PortfolioHeader, PortfolioFooter } from './varmory';
 import { JComponentShowcaseWithContent, JComponentShowcase } from './varmory';
-import JCurrentYear from './varmory/components/helpers/JCurrentYear.vue';
-import JDarkSwitcher from './varmory/components/helpers/JDarkSwitcher.vue';
-import JThemeSwitcher from './varmory/components/helpers/JThemeSwitcher.vue';
-import { QBtn, QList, QItem, QItemSection, QIcon, QMenu } from 'quasar';
+import Header from './varmory/appComponents/Header.vue';
+import Footer from './varmory/appComponents/Footer.vue';
 
 import Test from './extra/Test.vue';
 
@@ -48,17 +20,8 @@ export default {
 	components: {
 		JComponentShowcaseWithContent,
 		JComponentShowcase,
-		PortfolioHeader,
-		PortfolioFooter,
-		JThemeSwitcher,
-		QBtn,
-		QList,
-		QItem,
-		QItemSection,
-		QIcon,
-		QMenu,
-		JCurrentYear,
-		JDarkSwitcher,
+		Header,
+		Footer,
 	},
 	data() {
 		return {
@@ -82,65 +45,61 @@ export default {
 </script>
 <style>
 	#app {
-		background: linear-gradient(180deg, var(--q-surface-0) 0%, var(--q-surface-1) 40%, var(--q-surface-0) 100%);
+		background:
+			radial-gradient(ellipse 80% 60% at 0% 0%, color-mix(in srgb, var(--q-primary) 14%, transparent) 0%, transparent 70%),
+			radial-gradient(ellipse 80% 60% at 100% 100%, color-mix(in srgb, var(--q-secondary) 14%, transparent) 0%, transparent 70%),
+			linear-gradient(180deg,
+				color-mix(in srgb, var(--q-primary) 4%, var(--q-surface-0, #fff)) 0%,
+				color-mix(in srgb, var(--q-secondary) 6%, var(--q-surface-1, #f5f7fa)) 50%,
+				color-mix(in srgb, var(--q-primary) 4%, var(--q-surface-0, #fff)) 100%);
+		background-attachment: fixed;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
-		color: #2c3e50;
+		color: var(--q-text, #2c3e50);
 		margin-top: 0px;
+
+
+		font-family: 'Source Sans 3', 'Helvetica Neue', sans-serif;
 	}
-	.footerLink {
-		font-family: var(--font-mono);
-		font-size: 11px;
-		color: var(--q-text-muted);
-		text-decoration: none;
-		letter-spacing: 0.5px;
-		transition: color 0.15s ease;
+
+	.body--dark #app {
+		background:
+			radial-gradient(ellipse 80% 60% at 0% 0%, color-mix(in srgb, var(--q-primary) 22%, transparent) 0%, transparent 70%),
+			radial-gradient(ellipse 80% 60% at 100% 100%, color-mix(in srgb, var(--q-secondary) 22%, transparent) 0%, transparent 70%),
+			linear-gradient(180deg,
+				color-mix(in srgb, var(--q-primary) 8%, var(--q-surface-0, #0e0e14)) 0%,
+				color-mix(in srgb, var(--q-secondary) 10%, var(--q-surface-1, #14141c)) 50%,
+				color-mix(in srgb, var(--q-primary) 8%, var(--q-surface-0, #0e0e14)) 100%);
+		background-attachment: fixed;
+		color: var(--q-text, #e6e6e6);
 	}
-	.footerLink:hover {
-		color: var(--q-text-bright);
+
+	/* Firefox */
+	* {
+		scrollbar-width: thin;
+		scrollbar-color: color-mix(in srgb, var(--q-primary), transparent 50%) transparent;
 	}
-	.footerColumn {
-		display: flex;
-		flex-direction: column;
-		gap: 6px;
-		min-width: 120px;
+
+	/* Chrome / Safari / Edge */
+	::-webkit-scrollbar {
+		width: 4px;
+		height: 4px;
 	}
-.appHeaderThemeLabel {
-		font-family: var(--font-mono);
-		font-size: 11px;
-		letter-spacing: 1px;
-		color: var(--q-text-muted);
+
+	::-webkit-scrollbar-track {
+		background: transparent;
 	}
-.jThemeSwitcher .q-field__control {
-		min-height: 28px !important;
-		height: 28px !important;
+
+	::-webkit-scrollbar-thumb {
+		background: color-mix(in srgb, var(--q-primary), transparent 50%);
+		border-radius: 2px;
 	}
-.jThemeSwitcher .q-field__native {
-		padding: 0 4px !important;
-		min-height: 28px !important;
-		font-size: 11px !important;
+
+	::-webkit-scrollbar-thumb:hover {
+		background: color-mix(in srgb, var(--q-primary), transparent 70%);
 	}
-.jThemeSwitcher .q-field__prepend {
-		height: 28px !important;
-		padding-right: 4px !important;
-	}
-.jThemeSwitcher .q-field__prepend .q-icon {
-		font-size: 14px !important;
-	}
-.jThemeSwitcher .q-field__append {
-		height: 28px !important;
-		padding-left: 0 !important;
-	}
-.jThemeSwitcher .q-field__append .q-icon {
-		font-size: 16px !important;
-	}
-.footerColumnHeading {
-		font-family: var(--font-display);
-		font-size: 10px;
-		letter-spacing: 2px;
-		text-transform: uppercase;
-		color: var(--q-primary);
-		font-weight: 600;
-		margin-bottom: 4px;
+
+	::-webkit-scrollbar-corner {
+		background: transparent;
 	}
 </style>

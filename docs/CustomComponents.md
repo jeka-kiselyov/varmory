@@ -10,33 +10,25 @@ Split complex components into smaller, focused child components. Define shared C
 
 ## CSS variables, not hardcoded colors
 
-Never hardcode colors. All styling goes through CSS variables that the theme system controls:
+Never hardcode colors. Quasar exposes the brand palette through CSS variables — prefer those so your components automatically adapt to the host app's theme:
 
 ```css
 /* Brand:    --q-primary, --q-secondary, --q-accent */
 /* Status:   --q-positive, --q-negative, --q-info, --q-warning */
-/* Surfaces: --q-surface-0 .. --q-surface-3, --q-surface-border, --q-body-bg */
-/* Text:     --q-text-bright, --q-text, --q-text-muted, --q-text-faint */
-/* Panels:   --q-panel-gradient, --q-panel-compact-gradient */
-/* Effects:  --q-glow-primary, --q-glow-accent, --q-shadow-drop, --q-shadow-inset */
-/* Fonts:    --font-display (headers), --font-body (text), --font-mono (code/labels) */
-/* Sizes:    --q-text-size-small (12px), --q-text-size-default (14px), --q-text-size-readable (18px), --q-text-size-large (20px) */
-/* Spacing:  --q-gap-xs (4px), --q-gap-sm (8px), --q-gap-md (16px), --q-gap-lg (24px), --q-gap-xl (40px) */
-/* Radii:    --q-radius-sm (2px), --q-radius-md (4px), --q-radius-lg (8px) */
-/* Motion:   --q-transition-fast (0.15s), --q-transition-normal (0.25s) */
 ```
 
-See the **AllColors** showcase for the full list of variables and their values per theme.
+For surface/text/spacing/font tokens you can either use your app's own variables or Quasar's built-in classes (`.bg-*`, `.text-*`, `.q-pa-*`, etc.). For text color and borders inside cards, prefer `currentColor` and `inherit` so the element blends with whatever the host theme sets.
 
 ### Tints and transparency
 
-Use `color-mix()` to derive tints from theme colors:
+Use `color-mix()` to derive tints from brand colors or from `currentColor`:
 
 ```css
-color-mix(in srgb, var(--q-primary) 20%, transparent)   /* 20% primary overlay */
+color-mix(in srgb, var(--q-primary) 20%, transparent)    /* 20% primary overlay */
 color-mix(in srgb, var(--q-primary) 50%, black)          /* darker primary */
 color-mix(in srgb, var(--q-primary) 50%, white)          /* lighter primary */
-color-mix(in srgb, var(--q-surface-2) 60%, transparent)  /* semi-transparent surface */
+color-mix(in srgb, currentColor 8%, transparent)         /* subtle tint that adapts to light/dark */
+color-mix(in srgb, currentColor 15%, transparent)        /* subtle border that adapts to light/dark */
 ```
 
 ## Layout patterns
@@ -61,37 +53,23 @@ Use flexbox. Quasar's grid classes (`row`, `col-*`, `q-gutter-*`, `q-pa-*`, `q-m
 
 ## Component composition
 
-### JPanel — the standard container
+### Container: QCard
+
+Use Quasar's `QCard` as the standard container. Wrap the card in a small header + body pattern so every component has a consistent shape:
 
 ```html
-<JPanel title="Users" icon="people" footer-text="3 results">
-	<!-- content here -->
-</JPanel>
-```
-
-By default, JPanel applies no padding to its content (so you can drop wide components like QTabPanels directly inside). You'll usually want to add margin to the content yourself:
-
-```html
-<JPanel title="Users" icon="people" footer-text="3 results">
-	<div class="q-ma-md">
-		Content
+<QCard>
+	<div class="q-pa-md text-caption text-uppercase">
+		<QIcon name="people" size="sm" /> Users
 	</div>
-</JPanel>
+	<QSeparator />
+	<div class="q-pa-md">
+		<!-- content -->
+	</div>
+</QCard>
 ```
 
-Props: `title`, `icon`, `iconColor`, `accent`, `footerText`, `square`, `fullscreen`, `scroll`
-Slots: `default`, `title`, `header`, `header-action`, `footer`
-
-Use the `accent` prop to give the panel a themed background so it stands out from the surrounding layout. See [AccentBackground.md](./AccentBackground.md) for details and the underlying `varmoryBackgroundAccent` CSS hook.
-
-```html
-<JPanel title="Actions" accent>
-	<template #header-action>
-		<QBtn flat round icon="refresh" size="sm" />
-	</template>
-	<!-- content -->
-</JPanel>
-```
+Add `flat` for no shadow, `bordered` for a thin outline. Full props in the [Quasar QCard docs](https://quasar.dev/vue-components/card).
 
 ### Quasar components (commonly used)
 
@@ -131,17 +109,41 @@ Use the `accent` prop to give the panel a themed background so it stands out fro
 **Dialogs:**
 ```html
 <QDialog v-model="showDialog">
-	<JPanel title="Confirm" style="min-width: 350px">
-		<p>Are you sure?</p>
-		<template #footer>
+	<QCard style="min-width: 350px">
+		<QCardSection>Are you sure?</QCardSection>
+		<QCardActions align="right">
 			<QBtn flat label="Cancel" v-close-popup />
 			<QBtn color="primary" label="OK" v-close-popup />
-		</template>
-	</JPanel>
+		</QCardActions>
+	</QCard>
 </QDialog>
 ```
 
-**Other:** `QIcon`, `QChip`, `QBanner`, `QSpinner`, `QCircularProgress`, `QTabs`/`QTab`, `QMenu`
+**Other:** `QIcon`, `QChip`, `QBanner`, `QSpinner`, `QCircularProgress`, `QTabs`/`QTab`, `QMenu`, `QExpansionItem`, `QMarkupTable`, `QTable`, `QEditor`
+
+### Full Quasar component reference
+
+All Quasar components are available globally. See the [Quasar docs](https://quasar.dev/vue-components/) for props, slots, and events on each one.
+
+**Layout & structure:** `QLayout`, `QHeader`, `QFooter`, `QDrawer`, `QPage`, `QPageContainer`, `QPageScroller`, `QPageSticky`, `QToolbar`, `QToolbarTitle`, `QBar`, `QSpace`, `QSeparator`
+
+**Navigation:** `QTabs`, `QTab`, `QTabPanels`, `QTabPanel`, `QRouteTab`, `QBreadcrumbs`, `QBreadcrumbsEl`, `QStepper`, `QStep`, `QStepperNavigation`, `QPagination`, `QMenu`, `QTooltip`
+
+**Buttons:** `QBtn`, `QBtnDropdown`, `QBtnGroup`, `QBtnToggle`, `QFab`, `QFabAction`
+
+**Form inputs:** `QForm`, `QField`, `QInput`, `QSelect`, `QCheckbox`, `QRadio`, `QToggle`, `QOptionGroup`, `QSlider`, `QRange`, `QRating`, `QKnob`, `QDate`, `QTime`, `QColor`, `QFile`, `QUploader`, `QUploaderAddTrigger`, `QEditor`
+
+**Lists, tables & data:** `QList`, `QItem`, `QItemSection`, `QItemLabel`, `QExpansionItem`, `QMarkupTable`, `QTable`, `QTr`, `QTh`, `QTd`, `QTree`, `QVirtualScroll`, `QInfiniteScroll`
+
+**Cards & content:** `QCard`, `QCardSection`, `QCardActions`, `QBanner`, `QChatMessage`, `QTimeline`, `QTimelineEntry`
+
+**Dialogs & popups:** `QDialog`, `QPopupEdit`, `QPopupProxy`
+
+**Media & visuals:** `QAvatar`, `QBadge`, `QChip`, `QIcon`, `QImg`, `QVideo`, `QParallax`, `QResponsive`, `QCarousel`, `QCarouselControl`, `QCarouselSlide`
+
+**Progress & feedback:** `QSpinner` (plus variants: `QSpinnerAudio`, `QSpinnerBall`, `QSpinnerBars`, `QSpinnerBox`, `QSpinnerClock`, `QSpinnerComment`, `QSpinnerCube`, `QSpinnerDots`, `QSpinnerFacebook`, `QSpinnerGears`, `QSpinnerGrid`, `QSpinnerHearts`, `QSpinnerHourglass`, `QSpinnerInfinity`, `QSpinnerIos`, `QSpinnerOrbit`, `QSpinnerOval`, `QSpinnerPie`, `QSpinnerPuff`, `QSpinnerRadio`, `QSpinnerRings`, `QSpinnerTail`), `QCircularProgress`, `QLinearProgress`, `QAjaxBar`, `QInnerLoading`, `QSkeleton`, `QPullToRefresh`
+
+**Utilities & observers:** `QSplitter`, `QScrollArea`, `QScrollObserver`, `QResizeObserver`, `QIntersection`, `QSlideTransition`, `QSlideItem`, `QNoSsr`
 
 ## CSS class naming
 
@@ -157,41 +159,37 @@ Follow `ComponentName_elementName` convention:
 
 ## Styling rules
 
-1. All colors via CSS variables — never hardcode hex values
-2. Use `var(--font-display)` for headings, `var(--font-body)` for text, `var(--font-mono)` for labels/code
-3. Use `var(--q-transition-fast)` or `var(--q-transition-normal)` for transitions
-4. Use `var(--q-surface-border)` for borders, `var(--q-radius-md)` for border-radius
-5. Use `var(--q-gap-*)` for spacing in flex/grid layouts
-6. Support dark mode — use `.body--dark` selector when you need mode-specific overrides
+1. Use brand CSS variables for colors (`--q-primary` etc.) — never hardcode hex values
+2. For text/surfaces/borders inside cards, prefer `inherit` and `currentColor`-derived mixes so components adapt to whatever theme the host app sets
+3. Use Quasar's built-in utility classes when you can (`q-pa-md`, `q-ma-sm`, `row`, `col-*`, `items-center`, `bg-primary`, `text-muted`, …) — they cover most layout/spacing/typography needs
+4. Support dark mode — use the `.body--dark` selector when you need mode-specific overrides (Quasar manages this class automatically)
 
 **Example custom component style:**
 
 ```css
 .myWidget {
-	background: var(--q-panel-gradient);
-	border: 1px solid var(--q-surface-border);
-	border-radius: var(--q-radius-md);
-	padding: var(--q-gap-md);
-	color: var(--q-text);
-	font-family: var(--font-body);
-	transition: box-shadow var(--q-transition-fast);
+	background: transparent;                /* inherit from parent card */
+	border: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+	border-radius: 4px;
+	padding: 16px;
+	color: inherit;
+	transition: box-shadow 0.15s ease;
 }
 
 .myWidget:hover {
-	box-shadow: 0 0 12px var(--q-glow-primary);
+	box-shadow: 0 0 12px color-mix(in srgb, var(--q-primary) 20%, transparent);
 }
 
 .myWidget_title {
-	font-family: var(--font-display);
-	color: var(--q-text-bright);
-	font-size: var(--q-text-size-large);
-	margin-bottom: var(--q-gap-sm);
+	color: var(--q-primary);
+	font-size: 18px;
+	font-weight: 600;
+	margin-bottom: 8px;
 }
 
 .myWidget_caption {
-	font-family: var(--font-mono);
-	color: var(--q-text-muted);
-	font-size: var(--q-text-size-small);
+	color: color-mix(in srgb, currentColor 60%, transparent);
+	font-size: 12px;
 	text-transform: uppercase;
 	letter-spacing: 2px;
 }
@@ -199,7 +197,7 @@ Follow `ComponentName_elementName` convention:
 
 ## Dark mode
 
-The theme store manages dark/light mode. Quasar adds `.body--dark` to `<body>` automatically. CSS variables swap values per-mode, so most of the time you don't need mode-specific CSS. When you do:
+Quasar manages dark/light mode and adds `.body--dark` to `<body>` automatically. If you're layering on theme CSS variables that swap per-mode, most styles don't need mode-specific rules. When you do:
 
 ```css
 .body--dark .myWidget {
@@ -207,24 +205,26 @@ The theme store manages dark/light mode. Quasar adds `.body--dark` to `<body>` a
 }
 ```
 
-Programmatic access:
+Programmatic access via Quasar's dark plugin:
 
 ```js
-import { useThemeStore } from 'varmory';
-
-const theme = useThemeStore();
-theme.isDark       // boolean
-theme.toggleDark()
+this.$q.dark.isActive   // boolean
+this.$q.dark.toggle()
+this.$q.dark.set(true)  // or 'auto'
 ```
 
 ## Full example
 
 ```vue
 <template>
-	<JPanel title="Team Members" icon="groups" :footer-text="`${members.length} members`">
-		<template #header-action>
+	<QCard flat bordered>
+		<div class="row items-center q-pa-md">
+			<QIcon name="groups" color="primary" />
+			<span class="text-caption text-uppercase q-ml-sm">Team Members</span>
+			<QSpace />
 			<QBtn flat round icon="person_add" size="sm" color="primary" @click="showAdd = true" />
-		</template>
+		</div>
+		<QSeparator />
 
 		<QList>
 			<QItem v-for="m in members" :key="m.id" clickable>
@@ -240,7 +240,12 @@ theme.toggleDark()
 				</QItemSection>
 			</QItem>
 		</QList>
-	</JPanel>
+
+		<QSeparator />
+		<div class="q-pa-sm text-caption text-muted">
+			{{ members.length }} members
+		</div>
+	</QCard>
 </template>
 
 <script>

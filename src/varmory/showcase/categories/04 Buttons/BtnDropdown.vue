@@ -122,7 +122,7 @@
 
 <script>
 import { QBtnDropdown, QList, QItem, QItemSection, QIcon, QSeparator } from 'quasar';
-import QBtnDropdownApi from '../../definitions/Quasar/QBtnDropdown.json';
+import QBtnDropdownApi from 'quasar/src/components/btn-dropdown/QBtnDropdown.json';
 
 export default {
     name: 'ShowcaseQuasarBtnDropdown',

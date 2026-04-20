@@ -31,7 +31,7 @@
 
 <script>
 import { QBanner, QIcon, QBtn } from 'quasar';
-import QBannerApi from '../../definitions/Quasar/QBanner.json';
+import QBannerApi from 'quasar/src/components/banner/QBanner.json';
 
 export default {
     name: 'ShowcaseQuasarBanner',

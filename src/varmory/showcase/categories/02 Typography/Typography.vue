@@ -196,7 +196,7 @@ CSS HELPERS:
 }
 
 .typoSample {
-    color: var(--q-text);
+    color: inherit;
     min-width: 0;
 }
 
@@ -217,7 +217,7 @@ CSS HELPERS:
     font-size: var(--q-text-size-small);
     font-weight: 600;
     letter-spacing: 0.5px;
-    color: var(--q-text);
+    color: inherit;
     background: color-mix(in srgb, var(--q-text-bright) 4%, transparent);
     border-bottom: 1px solid color-mix(in srgb, var(--q-text-bright) 8%, transparent);
 }

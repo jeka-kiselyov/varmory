@@ -1,5 +1,16 @@
 import { computed } from 'vue';
 import ApiDocSection from './components/ApiDocSection.vue';
+import normalizeQuasarApi from '../includes/normalizeQuasarApiBrowser.js';
+
+function paramsToList(params) {
+    if (!params || typeof params !== 'object') return [];
+    return Object.entries(params).map(([name, def]) => ({
+        name,
+        typeLabel: Array.isArray(def?.type) ? def.type.join(' | ') : (def?.type || '—'),
+        desc: def?.desc || '',
+        required: def?.required === true,
+    }));
+}
 
 export default {
     components: { ApiDocSection },
@@ -15,6 +26,7 @@ export default {
                 propsList: this.apiPropsList,
                 slotsList: this.apiSlotsList,
                 eventsList: this.apiEventsList,
+                methodsList: this.apiMethodsList,
                 importName: this.apiImportName,
                 importFrom: this.apiImportFrom,
             })),
@@ -44,10 +56,10 @@ export default {
             if (Array.isArray(raw)) {
                 return raw.map(entry => ({
                     name: entry.name || null,
-                    data: entry.json || entry,
+                    data: normalizeQuasarApi(entry.json || entry),
                 }));
             }
-            return [{ name: null, data: raw }];
+            return [{ name: null, data: normalizeQuasarApi(raw) }];
         },
         apiTagName() {
             // From array entries: first group with a name (e.g. "QCard")
@@ -78,6 +90,10 @@ export default {
                     typeLabel: Array.isArray(def.type) ? def.type.join(' | ') : (def.type || '—'),
                     desc: def.desc || '',
                     default: def.default,
+                    examples: Array.isArray(def.examples) ? def.examples : [],
+                    values: Array.isArray(def.values) ? def.values : [],
+                    required: def.required === true,
+                    mixin: def._mixin || null,
                 }));
             });
         },
@@ -89,6 +105,14 @@ export default {
                     name,
                     group: g.name,
                     desc: def.desc || '',
+                    scope: def.scope
+                        ? Object.entries(def.scope).map(([k, v]) => ({
+                            name: k,
+                            typeLabel: Array.isArray(v?.type) ? v.type.join(' | ') : (v?.type || '—'),
+                            desc: v?.desc || '',
+                        }))
+                        : [],
+                    mixin: def._mixin || null,
                 }));
             });
         },
@@ -100,6 +124,27 @@ export default {
                     name,
                     group: g.name,
                     desc: def.desc || '',
+                    params: paramsToList(def.params),
+                    mixin: def._mixin || null,
+                }));
+            });
+        },
+        apiMethodsList() {
+            return this.apiGroups.flatMap(g => {
+                const methods = g.data?.methods;
+                if (!methods) return [];
+                return Object.entries(methods).map(([name, def]) => ({
+                    name,
+                    group: g.name,
+                    desc: def.desc || '',
+                    params: paramsToList(def.params),
+                    returns: (def.returns && typeof def.returns === 'object')
+                        ? {
+                            typeLabel: Array.isArray(def.returns.type) ? def.returns.type.join(' | ') : (def.returns.type || '—'),
+                            desc: def.returns.desc || '',
+                        }
+                        : null,
+                    mixin: def._mixin || null,
                 }));
             });
         },

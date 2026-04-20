@@ -29,8 +29,8 @@
 
 <script>
 import { QSlider, QRange } from 'quasar';
-import QSliderApi from '../../definitions/Quasar/QSlider.json';
-import QRangeApi from '../../definitions/Quasar/QRange.json';
+import QSliderApi from 'quasar/src/components/slider/QSlider.json';
+import QRangeApi from 'quasar/src/components/range/QRange.json';
 
 export default {
     name: 'ShowcaseQuasarSlider',

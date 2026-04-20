@@ -21,9 +21,9 @@
 
 <script>
 import { QCard, QCardSection, QCardActions, QBtn } from 'quasar';
-import QCardApi from '../../definitions/Quasar/QCard.json';
-import QCardSectionApi from '../../definitions/Quasar/QCardSection.json';
-import QCardActionsApi from '../../definitions/Quasar/QCardActions.json';
+import QCardApi from 'quasar/src/components/card/QCard.json';
+import QCardSectionApi from 'quasar/src/components/card/QCardSection.json';
+import QCardActionsApi from 'quasar/src/components/card/QCardActions.json';
 
 export default {
     name: 'ShowcaseQuasarCard',

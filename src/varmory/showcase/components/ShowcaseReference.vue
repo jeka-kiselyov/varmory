@@ -1,19 +1,19 @@
 <template>
     <div class="showcaseCodeCol">
-        <JPanel
-            :title="isTagName ? null : title"
-        >
-            <template v-if="isTagName" #title>
-                <div>
-                <span class="showcaseReference_tagName" @click="copy('&lt;' + activeGroupName + '&gt;')">
-                    <QIcon name="view_module" size="24px" class="jPanel_icon" color="secondary" />
-                    {{ activeGroupName }}</span>
-                &nbsp;<QBtn v-if="activeDocsUrl" color="accent" outline icon="open_in_new" :label="`Full ${activeComponentName} Docs`" :href="activeDocsUrl" target="_blank" size="md" dense />
+        <QCard class="showcaseCard" flat>
+            <div class="showcaseReference_header">
+                <div class="showcaseReference_titleBlock">
+                    <template v-if="isTagName">
+                        <span class="showcaseReference_tagName" @click="copy('&lt;' + activeGroupName + '&gt;')">
+                            <QIcon name="view_module" size="24px" color="secondary" />
+                            {{ activeGroupName }}
+                        </span>
+                        <QBtn v-if="activeDocsUrl" color="accent" outline icon="open_in_new" :label="`Full ${activeComponentName} Docs`" :href="activeDocsUrl" target="_blank" size="md" dense />
+                    </template>
+                    <template v-else>
+                        <span class="showcaseReference_title">{{ title }}</span>
+                    </template>
                 </div>
-            </template>
-            <template #footer>
-            </template>
-            <template #header-action>
                 <div class="rightTabs">
                     <span
                         class="rightTab"
@@ -32,7 +32,7 @@
                         CODE
                     </span>
                 </div>
-            </template>
+            </div>
 
             <div v-if="activeTab === 'api' && hasApi" class="apiBlock">
                 <div v-if="importNames.length" class="apiDocImport">
@@ -51,33 +51,32 @@
             </div>
             <div v-else class="codeBlock relative-position" @mouseenter="showCodeCopyButton = true" @mouseleave="showCodeCopyButton = false">
                 <transition name="codeFade" mode="out-in">
-                    <JPanel style="max-height: 70vh;" scroll>
+                    <div class="showcaseReference_codeScroll">
                         <div class="q-ma-sm">
                             <QMarkdown :src="codeMd" />
                         </div>
-                    </JPanel>
+                    </div>
                 </transition>
                 <transition name="codeFade" mode="out-in">
-                    <QBtn v-if="showCodeCopyButton" color="primary" icon="content_copy" size="sm" round @click="copyCode" 
+                    <QBtn v-if="showCodeCopyButton" color="primary" icon="content_copy" size="sm" round @click="copyCode"
                         style="position: absolute; top: 32px; right: 32px;"/>
                 </transition>
             </div>
-        </JPanel>
+        </QCard>
     </div>
 </template>
 
 <script>
-import { QBtn, QIcon } from 'quasar';
+import { QBtn, QCard, QIcon } from 'quasar';
 
 import { QMarkdown } from '@quasar/quasar-ui-qmarkdown';
 import '@quasar/quasar-ui-qmarkdown/dist/index.css';
 
-import JPanel from '../../components/JPanel.vue';
 import ApiDocSection from './ApiDocSection.vue';
 
 export default {
     name: 'ShowcaseReference',
-    components: { QMarkdown, QBtn, JPanel, ApiDocSection, QIcon },
+    components: { QMarkdown, QBtn, QCard, ApiDocSection, QIcon },
     inject: ['showcaseCopy', '__apiDoc'],
     props: {
         code: {
@@ -168,7 +167,10 @@ export default {
         apiGroups: {
             immediate: true,
             handler(groups) {
-                if (groups.length > 0) this.activeGroup = groups[0].name;
+                if (!groups.length) return;
+                // Only set when the current selection isn't already valid.
+                if (groups.some(g => g.name === this.activeGroup)) return;
+                this.activeGroup = groups[0].name;
             },
         },
     },
@@ -176,7 +178,40 @@ export default {
 </script>
 
 <style scoped>
+.showcaseReference_header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+    user-select: none;
+}
+
+.showcaseReference_titleBlock {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    flex: 1;
+}
+
+.showcaseReference_title {
+    font-family: var(--font-display, inherit);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    color: inherit;
+}
+
+.showcaseReference_codeScroll {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
 .showcaseReference_tagName {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     cursor: pointer;
 }
 
@@ -212,7 +247,7 @@ export default {
 }
 
 .rightTab:hover:not(.disabled) {
-    color: var(--q-text);
+    color: inherit;
     background: color-mix(in srgb, var(--q-text-bright) 3%, transparent);
 }
 
@@ -231,15 +266,15 @@ export default {
 .apiDocImport {
     font-family: var(--font-mono);
     font-size: var(--q-text-size-small);
-    background: color-mix(in srgb, var(--q-surface-2) 60%, transparent);
-    border: 1px solid var(--q-surface-border);
+    background: color-mix(in srgb, currentColor 4%, transparent);
+    border: 1px solid color-mix(in srgb, currentColor 15%, transparent);
     border-radius: 3px;
     padding: 10px 14px;
     margin-bottom: 12px;
 }
 
 .apiDocImport code {
-    color: var(--q-text);
+    color: inherit;
 }
 
 .apiDocImportKeyword {
@@ -263,7 +298,7 @@ export default {
     display: flex;
     gap: 4px;
     margin-bottom: 12px;
-    border-bottom: 1px solid var(--q-surface-border);
+    border-bottom: 1px solid color-mix(in srgb, currentColor 15%, transparent);
     padding-bottom: 8px;
 }
 
@@ -280,7 +315,7 @@ export default {
 }
 
 .componentTab:hover {
-    color: var(--q-text);
+    color: inherit;
     background: color-mix(in srgb, var(--q-text-bright) 3%, transparent);
 }
 

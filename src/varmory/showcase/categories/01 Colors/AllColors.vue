@@ -74,37 +74,6 @@ const colors = [
                     ],
                 },
                 {
-                    label: 'TEXT',
-                    colors: [
-                        { name: 'text-bright', varName: '--q-text-bright', var: 'var(--q-text-bright)' },
-                        { name: 'text', varName: '--q-text', var: 'var(--q-text)' },
-                        { name: 'text-muted', varName: '--q-text-muted', var: 'var(--q-text-muted)' },
-                        { name: 'text-faint', varName: '--q-text-faint', var: 'var(--q-text-faint)' },
-                    ],
-                },
-                {
-                    label: 'SURFACES',
-                    colors: [
-                        { name: 'surface-0', varName: '--q-surface-0', var: 'var(--q-surface-0)' },
-                        { name: 'surface-1', varName: '--q-surface-1', var: 'var(--q-surface-1)' },
-                        { name: 'surface-2', varName: '--q-surface-2', var: 'var(--q-surface-2)' },
-                        { name: 'surface-3', varName: '--q-surface-3', var: 'var(--q-surface-3)' },
-                        { name: 'surface-border', varName: '--q-surface-border', var: 'var(--q-surface-border)' },
-                        { name: 'surface-overlay', varName: '--q-surface-overlay', var: 'var(--q-surface-overlay)' },
-                        { name: 'body-bg', varName: '--q-body-bg', var: 'var(--q-body-bg)' },
-                    ],
-                },
-                {
-                    label: 'GLOWS & SHADOWS',
-                    colors: [
-                        { name: 'glow-primary', varName: '--q-glow-primary', var: 'var(--q-glow-primary)' },
-                        { name: 'glow-accent', varName: '--q-glow-accent', var: 'var(--q-glow-accent)' },
-                        { name: 'glow-warning', varName: '--q-glow-warning', var: 'var(--q-glow-warning)' },
-                        { name: 'shadow-drop', varName: '--q-shadow-drop', var: 'var(--q-shadow-drop)' },
-                        { name: 'shadow-inset', varName: '--q-shadow-inset', var: 'var(--q-shadow-inset)' },
-                    ],
-                },
-                {
                     label: 'QUASAR PALETTE',
                     rows: quasarPaletteFamilies.map(f => paletteGroup(f)),
                 },
@@ -180,7 +149,7 @@ export default {
     font-family: var(--font-mono);
     font-size: var(--q-text-size-small);
     letter-spacing: 2px;
-    color: var(--q-text);
+    color: inherit;
     padding-bottom: 6px;
     border-bottom: 1px solid color-mix(in srgb, var(--q-text-bright) 4%, transparent);
     margin-bottom: 6px;
@@ -258,7 +227,7 @@ export default {
 .colorVar {
     font-family: var(--font-mono);
     font-size: var(--q-text-size-small);
-    color: var(--q-text);
+    color: inherit;
     letter-spacing: 0.5px;
     white-space: nowrap;
     overflow: hidden;

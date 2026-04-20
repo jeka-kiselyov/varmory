@@ -225,11 +225,17 @@ export default {
     align-items: center;
     gap: 8px;
     padding: 10px 16px;
-    background: var(--q-surface-2, #1a1a2e);
-    border: 1px solid var(--q-surface-border, #333);
+    background: #ffffff;
+    color: #1a1a2e;
+    border: 1px solid color-mix(in srgb, currentColor 15%, transparent);
     border-radius: 4px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     pointer-events: auto;
+}
+
+.body--dark .showcaseToast {
+    background: #1a1a2e;
+    color: #ffffff;
 }
 
 .showcaseToast_icon {
@@ -241,7 +247,7 @@ export default {
     font-family: var(--font-mono, monospace);
     font-size: 12px;
     letter-spacing: 0.5px;
-    color: var(--q-text, #ccc);
+    color: inherit;
 }
 
 .showcaseToast-enter-active {
@@ -257,8 +263,23 @@ export default {
     transform: translateY(12px);
 }
 
+
 .showcaseToast-leave-to {
     opacity: 0;
     transform: translateX(20px);
+}
+</style>
+
+<style>
+/* Shared card look for the showcase shell (nav / main / reference / docs).
+   Non-scoped so child components can apply `.showcaseCard` directly. */
+.showcaseCard {
+    background: #fff;
+    color: inherit;
+}
+
+.body--dark .showcaseCard {
+    background: #000;
+    color: inherit;
 }
 </style>

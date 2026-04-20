@@ -45,7 +45,7 @@
 
 <script>
 import { QCircularProgress, QIcon } from 'quasar';
-import QCircularProgressApi from '../../definitions/Quasar/QCircularProgress.json';
+import QCircularProgressApi from 'quasar/src/components/circular-progress/QCircularProgress.json';
 
 export default {
     name: 'ShowcaseQuasarCircularProgress',

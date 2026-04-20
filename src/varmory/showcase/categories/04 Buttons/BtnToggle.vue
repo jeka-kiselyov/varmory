@@ -56,7 +56,7 @@
 
 <script>
 import { QBtnToggle } from 'quasar';
-import QBtnToggleApi from '../../definitions/Quasar/QBtnToggle.json';
+import QBtnToggleApi from 'quasar/src/components/btn-toggle/QBtnToggle.json';
 
 export default {
     name: 'ShowcaseBtnToggle',

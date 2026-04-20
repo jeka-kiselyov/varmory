@@ -49,7 +49,8 @@
 
 <script>
 import { QRadio, QList, QItem, QItemSection, QItemLabel } from 'quasar';
-import QRadioApi from '../../definitions/Quasar/QRadio.json';
+// import QRadioApi from 'quasar/src/components/radio/QRadio.json';
+import QRadioApi from 'quasar/src/components/radio/QRadio.json';
 
 export default {
     name: 'ShowcaseQuasarRadio',

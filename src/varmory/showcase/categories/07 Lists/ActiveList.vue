@@ -29,7 +29,7 @@
 
         <div class="jShowcase_group">
             <span class="jShowcase_title">Multi-line Items</span>
-            <QList bordered style="background: transparent; border-color: var(--q-surface-border); border-radius: 4px;">
+            <QList bordered style="background: transparent; border-color: color-mix(in srgb, currentColor 15%, transparent); border-radius: 4px;">
                 <QItem v-for="msg in messages" :key="msg.from" clickable v-ripple>
                     <QItemSection avatar top>
                         <QAvatar color="primary" text-color="white">{{ msg.from[0] }}</QAvatar>

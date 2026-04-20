@@ -136,8 +136,8 @@ import {
     QSpinnerOrbit, QSpinnerOval, QSpinnerPuff, QSpinnerRings,
     QSpinnerTail, QSpinnerGears, QSpinnerComment,
 } from 'quasar';
-import QSpinnerApi from '../../definitions/Quasar/QSpinner.json';
-import QInnerLoadingApi from '../../definitions/Quasar/QInnerLoading.json';
+import QSpinnerApi from 'quasar/src/components/spinner/QSpinner.json';
+import QInnerLoadingApi from 'quasar/src/components/inner-loading/QInnerLoading.json';
 
 export default {
     name: 'ShowcaseQuasarSpinner',
@@ -179,9 +179,9 @@ export default {
     flex: 1;
     min-width: 120px;
     height: 100px;
-    border: 1px solid var(--q-surface-border);
+    border: 1px solid color-mix(in srgb, currentColor 15%, transparent);
     border-radius: 4px;
-    background: var(--q-surface-1);
+    background: color-mix(in srgb, currentColor 4%, transparent);
     overflow: hidden;
 }
 

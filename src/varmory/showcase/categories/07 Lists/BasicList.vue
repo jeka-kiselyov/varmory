@@ -54,21 +54,30 @@
                         <QBadge color="negative" label="OFFLINE" />
                     </QItemSection>
                 </QItem>
+
+                <QExpansionItem icon="groups" label="Crew Manifest" caption="42 officers, 388 enlisted">
+                    <QCard>
+                        <QCardSection>
+                            All duty stations filled. 3 officers on shore leave. Next rotation begins stardate 41028.7.
+                        </QCardSection>
+                    </QCard>
+                </QExpansionItem>
             </QList>
         </div>
     </div>
 </template>
 
 <script>
-import { QList, QItem, QItemSection, QItemLabel, QIcon, QBadge } from 'quasar';
-import QListApi from '../../definitions/Quasar/QList.json';
-import QItemApi from '../../definitions/Quasar/QItem.json';
-import QItemSectionApi from '../../definitions/Quasar/QItemSection.json';
-import QItemLabelApi from '../../definitions/Quasar/QItemLabel.json';
+import { QList, QItem, QItemSection, QItemLabel, QIcon, QBadge, QExpansionItem, QCard, QCardSection } from 'quasar';
+import QListApi from 'quasar/src/components/item/QList.json';
+import QItemApi from 'quasar/src/components/item/QItem.json';
+import QItemSectionApi from 'quasar/src/components/item/QItemSection.json';
+import QItemLabelApi from 'quasar/src/components/item/QItemLabel.json';
+import QExpansionItemApi from 'quasar/src/components/expansion-item/QExpansionItem.json';
 
 export default {
     name: 'ShowcaseBasicList',
-    components: { QList, QItem, QItemSection, QItemLabel, QIcon, QBadge },
+    components: { QList, QItem, QItemSection, QItemLabel, QIcon, QBadge, QExpansionItem, QCard, QCardSection },
     label: 'Basic List',
     icon: 'list',
     order: 1,
@@ -77,6 +86,7 @@ export default {
         { name: 'QItem', json: QItemApi },
         { name: 'QItemSection', json: QItemSectionApi },
         { name: 'QItemLabel', json: QItemLabelApi },
+        { name: 'QExpansionItem', json: QExpansionItemApi },
     ],
     importName: 'QList',
     importFrom: 'quasar',

@@ -81,7 +81,7 @@ components: {
 
 ## Adding custom docs
 
-Pass `docs` to add markdown pages to the showcase's Readme section. With `JComponentShowcaseWithContent`, these are merged with the built-in docs (README.md, THEMING.md, etc.):
+Pass `docs` to add markdown pages to the showcase's Readme section. With `JComponentShowcaseWithContent`, these are merged with the built-in docs (README.md, USAGE.md, etc.):
 
 ```html
 <JComponentShowcaseWithContent :docs="docs" />
@@ -97,7 +97,7 @@ docs: {
 
 The key `README` is special — it's used as the default landing page when the showcase loads. Name your index/home doc `README` to make it appear first.
 
-Links between doc pages, e.g. (THEMING.md) or [README](README.md) are automatically intercepted and navigate within the showcase instead of opening a new tab.
+Links between doc pages, e.g. (USAGE.md) or [README](README.md) are automatically intercepted and navigate within the showcase instead of opening a new tab.
 
 ## Writing a showcase entry
 

@@ -13,71 +13,92 @@
             </div>
 
             <!-- Props -->
-            <div v-if="propsList.length" class="apiDocSection">
-                <div class="apiDocSectionHeader">
-                    <QIcon name="tune" size="16px" />
-                    <span>PROPS</span>
-                </div>
-                <div class="apiDocTable">
-                    <template v-for="(prop, idx) in propsList" :key="prop.group + '/' + prop.name">
-                        <div
-                            v-if="hasGroups && prop.group && (idx === 0 || propsList[idx - 1].group !== prop.group)"
-                            class="apiDocGroupLabel apiDocCopyable"
-                            @click="copy('&lt;' + prop.group + '&gt;')"
-                        >{{ prop.group }}</div>
-                        <div class="apiDocRow">
-                            <div class="apiDocPropName apiDocCopyable" @click="copy(prop.name)">{{ prop.name }}</div>
-                            <div class="apiDocPropType">{{ prop.typeLabel }}</div>
-                            <div class="apiDocPropDesc">{{ prop.desc }}</div>
-                            <div v-if="prop.default !== undefined" class="apiDocPropDefault">
-                                default: <code>{{ prop.default }}</code>
-                            </div>
-                        </div>
-                    </template>
-                </div>
-            </div>
+            <ApiDocSectionBlock title="PROPS" icon="tune" :items="propsList" :has-groups="hasGroups" show-type>
+                <template #details="{ item, copy: copyValue }">
+                    <div v-if="item.default !== undefined" class="apiDocPropDefault">
+                        default: <code>{{ item.default }}</code>
+                    </div>
+                    <div v-if="item.values.length" class="apiDocPropExamples">
+                        <span class="apiDocPropExamplesLabel">values:</span>
+                        <code
+                            v-for="v in item.values"
+                            :key="v"
+                            class="apiDocPropValue apiDocCopyable"
+                            @click.stop="copyValue(v)"
+                        >{{ stripQuotes(v) }}</code>
+                    </div>
+                    <div v-if="item.examples.length" class="apiDocPropExamples">
+                        <span class="apiDocPropExamplesLabel">examples:</span>
+                        <code
+                            v-for="ex in item.examples"
+                            :key="ex"
+                            class="apiDocPropExample apiDocCopyable"
+                            @click.stop="copyValue(ex)"
+                        >{{ stripQuotes(ex) }}</code>
+                    </div>
+                </template>
+            </ApiDocSectionBlock>
 
             <!-- Slots -->
-            <div v-if="slotsList.length" class="apiDocSection">
-                <div class="apiDocSectionHeader">
-                    <QIcon name="inventory_2" size="16px" />
-                    <span>SLOTS</span>
-                </div>
-                <div class="apiDocTable">
-                    <template v-for="(slot, idx) in slotsList" :key="slot.group + '/' + slot.name">
+            <ApiDocSectionBlock title="SLOTS" icon="inventory_2" :items="slotsList" :has-groups="hasGroups" prefix="#">
+                <template #details="{ item, copy: copyValue }">
+                    <div v-if="item.scope.length" class="apiDocSlotScope">
+                        <div class="apiDocSlotScopeLabel">scope props (v-slot="props"):</div>
                         <div
-                            v-if="hasGroups && slot.group && (idx === 0 || slotsList[idx - 1].group !== slot.group)"
-                            class="apiDocGroupLabel apiDocCopyable"
-                            @click="copy('&lt;' + slot.group + '&gt;')"
-                        >{{ slot.group }}</div>
-                        <div class="apiDocRow">
-                            <div class="apiDocPropName apiDocCopyable" @click="copy('#' + slot.name)">#{{ slot.name }}</div>
-                            <div class="apiDocPropDesc">{{ slot.desc }}</div>
+                            v-for="s in item.scope"
+                            :key="s.name"
+                            class="apiDocSlotScopeRow"
+                        >
+                            <code class="apiDocSlotScopeName apiDocCopyable" @click.stop="copyValue('props.' + s.name)">{{ s.name }}</code>
+                            <span class="apiDocSlotScopeType">{{ s.typeLabel }}</span>
+                            <span class="apiDocSlotScopeDesc">{{ s.desc }}</span>
                         </div>
-                    </template>
-                </div>
-            </div>
+                    </div>
+                </template>
+            </ApiDocSectionBlock>
 
             <!-- Events -->
-            <div v-if="eventsList.length" class="apiDocSection">
-                <div class="apiDocSectionHeader">
-                    <QIcon name="electric_bolt" size="16px" />
-                    <span>EVENTS</span>
-                </div>
-                <div class="apiDocTable">
-                    <template v-for="(evt, idx) in eventsList" :key="evt.group + '/' + evt.name">
+            <ApiDocSectionBlock title="EVENTS" icon="electric_bolt" :items="eventsList" :has-groups="hasGroups" prefix="@">
+                <template #details="{ item }">
+                    <div v-if="item.params.length" class="apiDocSlotScope">
+                        <div class="apiDocSlotScopeLabel">payload:</div>
                         <div
-                            v-if="hasGroups && evt.group && (idx === 0 || eventsList[idx - 1].group !== evt.group)"
-                            class="apiDocGroupLabel apiDocCopyable"
-                            @click="copy('&lt;' + evt.group + '&gt;')"
-                        >{{ evt.group }}</div>
-                        <div class="apiDocRow">
-                            <div class="apiDocPropName apiDocCopyable" @click="copy('@' + evt.name)">@{{ evt.name }}</div>
-                            <div class="apiDocPropDesc">{{ evt.desc }}</div>
+                            v-for="p in item.params"
+                            :key="p.name"
+                            class="apiDocSlotScopeRow"
+                        >
+                            <code class="apiDocSlotScopeName">{{ p.name }}</code>
+                            <span class="apiDocSlotScopeType">{{ p.typeLabel }}</span>
+                            <span class="apiDocSlotScopeDesc">{{ p.desc }}</span>
                         </div>
-                    </template>
-                </div>
-            </div>
+                    </div>
+                </template>
+            </ApiDocSectionBlock>
+
+            <!-- Methods -->
+            <ApiDocSectionBlock title="METHODS" icon="functions" :items="methodsList" :has-groups="hasGroups" suffix="()">
+                <template #details="{ item }">
+                    <div v-if="item.params.length" class="apiDocSlotScope">
+                        <div class="apiDocSlotScopeLabel">params:</div>
+                        <div
+                            v-for="p in item.params"
+                            :key="p.name"
+                            class="apiDocSlotScopeRow"
+                        >
+                            <code class="apiDocSlotScopeName">{{ p.name }}<span v-if="p.required" class="apiDocPropRequired">*</span></code>
+                            <span class="apiDocSlotScopeType">{{ p.typeLabel }}</span>
+                            <span class="apiDocSlotScopeDesc">{{ p.desc }}</span>
+                        </div>
+                    </div>
+                    <div v-if="item.returns" class="apiDocSlotScope">
+                        <div class="apiDocSlotScopeLabel">returns:</div>
+                        <div class="apiDocSlotScopeRow">
+                            <span class="apiDocSlotScopeType">{{ item.returns.typeLabel }}</span>
+                            <span class="apiDocSlotScopeDesc">{{ item.returns.desc }}</span>
+                        </div>
+                    </div>
+                </template>
+            </ApiDocSectionBlock>
         </template>
 
         <div v-else-if="doc.error" class="apiDocError">
@@ -89,10 +110,11 @@
 
 <script>
 import { QIcon, QSpinnerOrbit } from 'quasar';
+import ApiDocSectionBlock from './ApiDocSectionBlock.vue';
 
 export default {
     name: 'ApiDocSection',
-    components: { QIcon, QSpinnerOrbit },
+    components: { QIcon, QSpinnerOrbit, ApiDocSectionBlock },
     inject: ['__apiDoc', 'showcaseCopy'],
     props: {
         group: { type: String, default: null },
@@ -111,15 +133,15 @@ export default {
         eventsList() {
             return this.group ? this.doc.eventsList.filter(e => e.group === this.group) : this.doc.eventsList;
         },
+        methodsList() {
+            return this.group ? (this.doc.methodsList || []).filter(m => m.group === this.group) : (this.doc.methodsList || []);
+        },
         importNames() {
             const n = this.doc.importName;
             return Array.isArray(n) ? n : [n];
         },
-        importLine() {
-            return this.importNames.map(n => `import { ${n} } from '${this.doc.importFrom}';`).join('\n');
-        },
         hasGroups() {
-            const all = [...this.propsList, ...this.slotsList, ...this.eventsList];
+            const all = [...this.propsList, ...this.slotsList, ...this.eventsList, ...this.methodsList];
             const groups = new Set(all.map(i => i.group).filter(Boolean));
             return groups.size > 1;
         },
@@ -127,6 +149,11 @@ export default {
     methods: {
         copy(text) {
             this.showcaseCopy(text);
+        },
+        stripQuotes(s) {
+            if (typeof s !== 'string') return s;
+            const m = s.match(/^(['"])(.*)\1$/);
+            return m ? m[2] : s;
         },
     },
 };
@@ -143,7 +170,7 @@ export default {
     gap: 8px;
     font-family: var(--font-mono);
     font-size: var(--q-text-size-small);
-    color: var(--q-text);
+    color: inherit;
     padding: 12px 0;
 }
 
@@ -160,15 +187,21 @@ export default {
 .apiDocImport {
     font-family: var(--font-mono);
     font-size: var(--q-text-size-small);
-    background: color-mix(in srgb, var(--q-surface-2) 60%, transparent);
-    border: 1px solid var(--q-surface-border);
+    background: color-mix(in srgb, currentColor 4%, transparent);
+    border: 1px solid color-mix(in srgb, currentColor 15%, transparent);
     border-radius: 3px;
     padding: 10px 14px;
     margin-bottom: 16px;
 }
 
 .apiDocImport code {
-    color: var(--q-text);
+    color: inherit;
+    cursor: pointer;
+}
+
+.apiDocImport code:hover {
+    text-decoration: underline;
+    text-decoration-style: dashed;
 }
 
 .apiDocImportKeyword {
@@ -179,43 +212,6 @@ export default {
     color: var(--q-positive);
 }
 
-.apiDocSection {
-    margin-bottom: 16px;
-}
-
-.apiDocSectionHeader {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-family: var(--font-mono);
-    font-size: var(--q-text-size-small);
-    letter-spacing: 2px;
-    color: var(--q-accent);
-    padding-bottom: 8px;
-    border-bottom: 1px solid color-mix(in srgb, var(--q-accent) 20%, transparent);
-    margin-bottom: 8px;
-}
-
-.apiDocTable {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.apiDocRow {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 8px;
-    padding: 6px 8px;
-    border-radius: 3px;
-    transition: background 0.15s ease;
-}
-
-.apiDocRow:hover {
-    background: color-mix(in srgb, var(--q-text-bright) 3%, transparent);
-}
-
 .apiDocCopyable {
     cursor: pointer;
 }
@@ -223,56 +219,5 @@ export default {
 .apiDocCopyable:hover {
     text-decoration: underline;
     text-decoration-style: dashed;
-}
-
-.apiDocPropName {
-    font-family: var(--font-mono);
-    font-size: var(--q-text-size-small);
-    font-weight: 600;
-    color: var(--q-primary);
-    min-width: 120px;
-}
-
-.apiDocPropType {
-    font-family: var(--font-mono);
-    font-size: var(--q-text-size-small);
-    color: var(--q-secondary);
-    background: color-mix(in srgb, var(--q-secondary) 10%, transparent);
-    padding: 1px 6px;
-    border-radius: 2px;
-}
-
-.apiDocPropDesc {
-    font-family: var(--font-body);
-    font-size: var(--q-text-size-default);
-    color: var(--q-text);
-    flex: 1;
-    min-width: 150px;
-}
-
-.apiDocPropDefault {
-    font-family: var(--font-mono);
-    font-size: var(--q-text-size-small);
-    color: var(--q-text);
-}
-
-.apiDocPropDefault code {
-    color: var(--q-info);
-    font-family: inherit;
-}
-
-.apiDocGroupLabel {
-    font-family: var(--font-mono);
-    font-size: var(--q-text-size-small);
-    letter-spacing: 1.5px;
-    color: var(--q-info);
-    padding: 6px 8px 2px;
-    margin-top: 6px;
-    border-top: 1px solid color-mix(in srgb, var(--q-text-bright) 4%, transparent);
-}
-
-.apiDocGroupLabel:first-child {
-    margin-top: 0;
-    border-top: none;
 }
 </style>

@@ -11,7 +11,7 @@
 
 <script>
 import { QToggle } from 'quasar';
-import QToggleApi from '../../definitions/Quasar/QToggle.json';
+import QToggleApi from 'quasar/src/components/toggle/QToggle.json';
 
 export default {
     name: 'ShowcaseQuasarToggle',

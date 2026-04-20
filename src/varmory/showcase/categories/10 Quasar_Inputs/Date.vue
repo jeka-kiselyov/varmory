@@ -39,7 +39,7 @@
 
 <script>
 import { QDate } from 'quasar';
-import QDateApi from '../../definitions/Quasar/QDate.json';
+import QDateApi from 'quasar/src/components/date/QDate.json';
 
 export default {
 	name: 'ShowcaseQuasarDate',

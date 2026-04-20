@@ -10,7 +10,7 @@
 
 <script>
 import { QCheckbox } from 'quasar';
-import QCheckboxApi from '../../definitions/Quasar/QCheckbox.json';
+import QCheckboxApi from 'quasar/src/components/checkbox/QCheckbox.json';
 
 export default {
     name: 'ShowcaseQuasarCheckbox',

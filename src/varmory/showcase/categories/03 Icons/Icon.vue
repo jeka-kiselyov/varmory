@@ -53,7 +53,7 @@
 
 <script>
 import { QIcon, QInput, QTabs, QTab } from 'quasar';
-import QIconApi from '../../definitions/Quasar/QIcon.json';
+import QIconApi from 'quasar/src/components/icon/QIcon.json';
 import allIcons from '../../definitions/materialIcons.js';
 
 const allCategories = [...new Set(allIcons.map(i => i[1]))].sort();
@@ -139,7 +139,7 @@ export default {
     font-family: var(--font-mono);
     font-size: var(--q-text-size-small);
     letter-spacing: 1px;
-    color: var(--q-text);
+    color: inherit;
 }
 
 .iconGrid {
@@ -158,7 +158,7 @@ export default {
     border: 1px solid color-mix(in srgb, var(--q-text-bright) 5%, transparent);
     cursor: pointer;
     transition: all 0.15s ease;
-    color: var(--q-text);
+    color: inherit;
     min-width: 0;
     overflow: hidden;
 }

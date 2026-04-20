@@ -21,7 +21,7 @@
 
 <script>
 import { QRating } from 'quasar';
-import QRatingApi from '../../definitions/Quasar/QRating.json';
+import QRatingApi from 'quasar/src/components/rating/QRating.json';
 
 export default {
     name: 'ShowcaseQuasarRating',

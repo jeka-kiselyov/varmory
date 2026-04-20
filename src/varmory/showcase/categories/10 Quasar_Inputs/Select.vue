@@ -135,7 +135,7 @@
 
 <script>
 import { QSelect } from 'quasar';
-import QSelectApi from '../../definitions/Quasar/QSelect.json';
+import QSelectApi from 'quasar/src/components/select/QSelect.json';
 
 export default {
     name: 'ShowcaseQuasarSelect',

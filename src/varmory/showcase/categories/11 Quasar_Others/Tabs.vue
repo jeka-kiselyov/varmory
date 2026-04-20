@@ -37,10 +37,10 @@
 
 <script>
 import { QTabs, QTab, QTabPanels, QTabPanel } from 'quasar';
-import QTabsApi from '../../definitions/Quasar/QTabs.json';
-import QTabApi from '../../definitions/Quasar/QTab.json';
-import QTabPanelsApi from '../../definitions/Quasar/QTabPanels.json';
-import QTabPanelApi from '../../definitions/Quasar/QTabPanel.json';
+import QTabsApi from 'quasar/src/components/tabs/QTabs.json';
+import QTabApi from 'quasar/src/components/tabs/QTab.json';
+import QTabPanelsApi from 'quasar/src/components/tab-panels/QTabPanels.json';
+import QTabPanelApi from 'quasar/src/components/tab-panels/QTabPanel.json';
 
 export default {
     name: 'ShowcaseQuasarTabs',
@@ -74,12 +74,12 @@ export default {
 }
 
 .showcaseTabs_bar {
-    border-bottom: 1px solid var(--q-surface-border);
+    border-bottom: 1px solid color-mix(in srgb, currentColor 15%, transparent);
 }
 
 .showcaseTabs_panels {
     background: transparent;
-    color: var(--q-text);
+    color: inherit;
     font-family: var(--font-mono);
     font-size: var(--q-text-size-small);
     letter-spacing: 0.5px;

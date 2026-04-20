@@ -284,7 +284,7 @@
 
 <script>
 import { QBtn, QMenu, QList, QItem, QItemSection, QIcon, QSeparator } from 'quasar';
-import QMenuApi from '../../definitions/Quasar/QMenu.json';
+import QMenuApi from 'quasar/src/components/menu/QMenu.json';
 
 export default {
     name: 'ShowcaseMenu',

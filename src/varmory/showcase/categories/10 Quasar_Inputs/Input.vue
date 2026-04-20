@@ -71,7 +71,7 @@
 
 <script>
 import { QInput, QIcon } from 'quasar';
-import QInputApi from '../../definitions/Quasar/QInput.json';
+import QInputApi from 'quasar/src/components/input/QInput.json';
 
 export default {
     name: 'ShowcaseQuasarInput',

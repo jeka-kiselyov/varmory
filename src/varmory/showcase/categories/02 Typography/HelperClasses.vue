@@ -234,6 +234,6 @@ BORDER:
 .helperClasses_desc {
     font-family: var(--font-body);
     font-size: var(--q-text-size-small);
-    color: var(--q-text);
+    color: inherit;
 }
 </style>

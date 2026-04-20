@@ -1,10 +1,10 @@
 <template>
     <div class="showcaseNav_col">
-        <JPanel
-            title="COMPONENTS"
-            icon="widgets"
-            icon-color="var(--q-secondary)"
-        >
+        <QCard class="showcaseCard" flat>
+            <div class="showcaseNav_header">
+                <QIcon name="widgets" size="14px" color="secondary" />
+                <span>COMPONENTS</span>
+            </div>
             <div class="showcaseNav_search">
                 <QIcon name="search" size="20px" class="showcaseNav_searchIcon" />
                 <input
@@ -110,18 +110,17 @@
                     </div>
                 </div>
             </template>
-        </JPanel>
+        </QCard>
 
     </div>
 </template>
 
 <script>
-import { QIcon } from 'quasar';
-import JPanel from '../../components/JPanel.vue';
+import { QCard, QIcon } from 'quasar';
 
 export default {
     name: 'ShowcaseNav',
-    components: { JPanel, QIcon },
+    components: { QCard, QIcon },
     props: {
         activeTab: {
             type: String,
@@ -302,6 +301,20 @@ export default {
     gap: 16px;
 }
 
+.showcaseNav_header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    font-family: var(--font-display, inherit);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    color: inherit;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+    user-select: none;
+}
+
 .showcaseNav_search {
     display: flex;
     align-items: center;
@@ -309,17 +322,16 @@ export default {
     margin: 8px 8px 0;
     padding: 6px 10px;
     border-radius: 3px;
-    border: 1px solid color-mix(in srgb, var(--q-text-bright) 8%, transparent);
-    background: color-mix(in srgb, var(--q-surface-0) 60%, transparent);
+    border: 1px solid color-mix(in srgb, var(--q-primary) 8%, transparent);
     transition: border-color 0.15s ease;
 }
 
 .showcaseNav_search:focus-within {
-    border-color: color-mix(in srgb, var(--q-accent) 40%, transparent);
+    border-color: color-mix(in srgb, var(--q-primary) 13%, transparent);
 }
 
 .showcaseNav_searchIcon {
-    color: var(--q-text-faint);
+    color: color-mix(in srgb, var(--q-primary) 75%, transparent);
     flex-shrink: 0;
 }
 
@@ -328,26 +340,24 @@ export default {
     background: none;
     border: none;
     outline: none;
-    font-family: var(--font-mono);
-    font-size: var(--q-text-size-small);
     letter-spacing: 0.5px;
-    color: var(--q-text);
+    color: inherit;
     min-width: 0;
 }
 
 .showcaseNav_searchInput::placeholder {
-    color: var(--q-text-faint);
+    color: var(--q-text-faint, inherit);
 }
 
 .showcaseNav_searchClear {
-    color: var(--q-text-faint);
+    color: var(--q-text-faint, inherit);
     cursor: pointer;
     flex-shrink: 0;
     transition: color 0.15s ease;
 }
 
 .showcaseNav_searchClear:hover {
-    color: var(--q-text);
+    color: inherit;
 }
 
 .showcaseNav_list {
@@ -365,27 +375,21 @@ export default {
     padding: 7px 10px;
     border-radius: 3px;
     cursor: pointer;
-    font-family: var(--font-mono);
-    font-size: var(--q-text-size-small);
     letter-spacing: 1px;
-    color: var(--q-text);
     transition: all 0.15s ease;
     user-select: none;
 }
 
 .showcaseNav_categoryHeader:hover {
-    background: color-mix(in srgb, var(--q-text-bright) 3%, transparent);
+    background: color-mix(in srgb, var(--q-primary) 13%, transparent);
 }
 
 .showcaseNav_categoryHeader.expanded {
-    color: var(--q-text-bright);
 }
 
 .showcaseNav_count {
     margin-left: auto;
-    font-size: var(--q-text-size-small);
-    color: var(--q-text);
-    background: color-mix(in srgb, var(--q-text-bright) 5%, transparent);
+    background: color-mix(in srgb, var(--q-primary) 13%, transparent);
     padding: 1px 6px;
     border-radius: 8px;
     min-width: 18px;
@@ -393,7 +397,6 @@ export default {
 }
 
 .showcaseNav_chevron {
-    color: var(--q-text-faint);
     transition: transform 0.2s ease;
     flex-shrink: 0;
 }
@@ -413,13 +416,11 @@ export default {
 
 .showcaseNav_child {
     padding: 5px 10px !important;
-    font-size: var(--q-text-size-small) !important;
     letter-spacing: 0.5px !important;
-    color: var(--q-text-muted) !important;
 }
 
 .showcaseNav_child:hover {
-    color: var(--q-text) !important;
+    color: color-mix(in srgb, var(--q-accent) 75%, transparent) !important;
 }
 
 .showcaseNav_child.active {
@@ -434,16 +435,12 @@ export default {
     padding: 8px 12px;
     border-radius: 3px;
     cursor: pointer;
-    font-family: var(--font-mono);
-    font-size: var(--q-text-size-small);
     letter-spacing: 1px;
-    color: var(--q-text);
     border: 1px solid transparent;
     transition: all 0.15s ease;
 }
 
 .showcaseNav_item:hover {
-    background: color-mix(in srgb, var(--q-text-bright) 3%, transparent);
 }
 
 .showcaseNav_item.active {
@@ -461,15 +458,10 @@ export default {
 }
 
 .showcaseNav_resultCat {
-    font-size: var(--q-text-size-small);
     letter-spacing: 1.5px;
-    color: var(--q-text-faint);
 }
 
 .showcaseNav_empty {
-    font-family: var(--font-mono);
-    font-size: var(--q-text-size-small);
-    color: var(--q-text-faint);
     padding: 12px;
     text-align: center;
 }
@@ -479,7 +471,7 @@ export default {
 }
 
 .showcaseNav_docs {
-    border-bottom: 1px solid color-mix(in srgb, var(--q-surface-border) 60%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--q-primary) 10%, transparent);
     padding-bottom: 4px;
     margin-bottom: 0;
 }

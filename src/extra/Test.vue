@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import QBtnApi from '../varmory/showcase/definitions/Quasar/QBtn.json';
+import QBtnApi from 'quasar/src/components/btn/QBtn.json';
 import { QBtn } from 'quasar';
 
 export default {
