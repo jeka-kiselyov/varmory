@@ -39,14 +39,14 @@
                 <QBtnToggle
                     v-model="toggleValue"
                     label="Toggle me"
-                    toggle-color="primary"
-                    color="surface-0"
-                    text-color="faint"
+                    toggle-color="accent"
+                    color="primary"
+                    text-color="primary"
                     outline
                     :options="[
-                        { label: 'One', value: 'one' },
-                        { label: 'Two', value: 'two' },
-                        { label: 'Three', value: 'three' }
+                        { label: 'One', value: 'one', icon: (toggleValue == 'one' ? 'check_circle' : undefined) },
+                        { label: 'Two', value: 'two', icon: (toggleValue == 'two' ? 'check_circle' : undefined)  },
+                        { label: 'Three', value: 'three', icon: (toggleValue == 'three' ? 'check_circle' : undefined)  }
                     ]"
                 />
             </div>

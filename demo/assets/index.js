@@ -246,6 +246,8 @@ Drop in an interactive browser for the Quasar components you use and any custom 
 - [Component Showcase](https://varmory-dec8b20a1b83.herokuapp.com/)
 - [MCP Server](https://varmory-dec8b20a1b83.herokuapp.com/#docs/MCP)
 
+> See [**themed_varmory**](https://github.com/jeka-kiselyov/themed_varmory) for a reference example of using varmory as a base to build your own themed component library — swappable themes, a theme store, custom components, and an MCP server with an extended set of components and API definitions.
+
 ## Installation
 
 \`\`\`bash
