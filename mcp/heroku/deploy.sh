@@ -75,5 +75,6 @@ echo "==> Deploying to $APP"
 echo "==> Cleaning up"
 rm -rf "$TMPDIR"
 
-echo "==> Done. App: https://$APP.herokuapp.com"
-echo "    MCP endpoint: https://$APP.herokuapp.com/mcp"
+URL=$(heroku info -s --app "$APP" | grep '^web_url=' | cut -d= -f2- | sed 's:/*$::')
+echo "==> Done. App: $URL"
+echo "    MCP endpoint: $URL/mcp"
