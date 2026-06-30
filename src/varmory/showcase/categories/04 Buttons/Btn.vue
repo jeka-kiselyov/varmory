@@ -1,6 +1,10 @@
 <template>
     <div class="jShowcase_row jShowcase_column">
 
+        <div class="jShowcase_info">
+            When a QBtn has only an icon prop and no label, prefer to pass round (or round dense for tighter layouts) so it renders as a circular icon button.
+        </div>
+
         <!-- Style variants -->
         <div class="jShowcase_group">
             <span class="jShowcase_title">Variants</span>

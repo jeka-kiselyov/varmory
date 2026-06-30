@@ -42,6 +42,7 @@ The `import-from` prop controls the package name shown in code samples (defaults
 | `components` | Object | `{}` | Categories of showcase items. Keys are category names, values are arrays of Vue components or item objects. |
 | `docs` | Object | `{}` | Markdown doc pages. Keys are page names, values are raw markdown strings. |
 | `import-from` | String | `'varmory'` | Package name shown in code reference panel. |
+| `search-url` | String | `null` | URL to a pre-built `.vecito` search index. When provided, the sidebar uses semantic search instead of substring matching. See [MCP docs](#MCP) for how to build the index. |
 
 ## Built-in categories
 

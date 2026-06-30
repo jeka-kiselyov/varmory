@@ -39,6 +39,33 @@
             </div>
         </div>
 
+        <!-- With Actions -->
+        <div class="jShowcase_group">
+            <span class="jShowcase_title">With Actions</span>
+            <div class="jShowcase_items">
+                <QInput v-model="actionInput" label="Append action" color="secondary" outlined class="showcaseInput_field">
+                    <template #append>
+                        <QBtn round dense flat icon="event" />
+                    </template>
+                </QInput>
+                <QInput v-model="dateInput" label="Before icon" color="secondary" outlined class="showcaseInput_field">
+                    <template #before>
+                        <QBtn round dense flat icon="add" />
+                    </template>
+                </QInput>
+                <QInput v-model="afterInput" label="After action" color="secondary" outlined class="showcaseInput_field">
+                    <template #after>
+                        <QBtn round dense flat icon="send" />
+                    </template>
+                </QInput>
+                <QInput v-model="afterInput" dense label="Dense with after" color="secondary"  class="showcaseInput_field">
+                    <template #after>
+                        <QBtn round dense flat icon="send" />
+                    </template>
+                </QInput>
+            </div>
+        </div>
+
         <!-- Hints & counter -->
         <div class="jShowcase_group">
             <span class="jShowcase_title">Hints &amp; Counter</span>
@@ -70,12 +97,12 @@
 </template>
 
 <script>
-import { QInput, QIcon } from 'quasar';
+import { QInput, QIcon, QBtn } from 'quasar';
 import QInputApi from 'quasar/src/components/input/QInput.json';
 
 export default {
     name: 'ShowcaseQuasarInput',
-    components: { QInput, QIcon },
+    components: { QInput, QIcon, QBtn },
     label: 'Quasar Input',
     icon: 'edit_note',
     apiJson: QInputApi,
@@ -100,6 +127,9 @@ export default {
             counted: '',
             textarea: 'Captain\'s log, stardate 41153.7.',
             autogrow: '',
+            actionInput: '',
+            dateInput: '',
+            afterInput: '',
         };
     },
 };

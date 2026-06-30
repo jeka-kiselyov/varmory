@@ -13,6 +13,9 @@ const plugin = {
     }
 };
 
+if (typeof window !== 'undefined' && window.Vue) {
+    window.Varmory = Varmory;
+}
 
 export {
     plugin as Varmory,

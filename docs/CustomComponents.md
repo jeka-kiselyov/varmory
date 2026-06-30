@@ -35,6 +35,8 @@ color-mix(in srgb, currentColor 15%, transparent)        /* subtle border that a
 
 Use flexbox. Quasar's grid classes (`row`, `col-*`, `q-gutter-*`, `q-pa-*`, `q-ma-*`) are available globally.
 
+For spacing between flex children, prefer Quasar's `q-gutter-*` / `q-col-gutter-*` classes (`xs`=4, `sm`=8, `md`=16, `lg`=24, `xl`=48) over inline `style="gap: Npx"`. Pick the closest size — only fall back to inline `gap` when a non-standard pixel value is actually required.
+
 **Flex row with wrapping:**
 ```html
 <div class="row items-center q-gutter-sm">
@@ -57,19 +59,10 @@ Use flexbox. Quasar's grid classes (`row`, `col-*`, `q-gutter-*`, `q-pa-*`, `q-m
 
 Use Quasar's `QCard` as the standard container. Wrap the card in a small header + body pattern so every component has a consistent shape:
 
-```html
-<QCard>
-	<div class="q-pa-md text-caption text-uppercase">
-		<QIcon name="people" size="sm" /> Users
-	</div>
-	<QSeparator />
-	<div class="q-pa-md">
-		<!-- content -->
-	</div>
-</QCard>
-```
+[QCard](#Panels/Card)
 
-Add `flat` for no shadow, `bordered` for a thin outline. Full props in the [Quasar QCard docs](https://quasar.dev/vue-components/card).
+
+Add `flat` for no shadow, `bordered` for a thin outline.
 
 ### Quasar components (commonly used)
 

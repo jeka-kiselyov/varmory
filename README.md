@@ -57,6 +57,23 @@ createApp(App)
 
 See [USAGE.md](https://varmory-dec8b20a1b83.herokuapp.com/#docs/USAGE) for the rest of the setup details.
 
+## Semantic Search (optional)
+
+The showcase sidebar and MCP server support semantic search via [vecito](https://www.npmjs.com/package/vecito). It's an optional dependency — when installed, search uses hybrid dense embeddings + BM25; otherwise it falls back to substring matching.
+
+```bash
+pnpm add vecito
+node node_modules/varmory/scripts/buildSearchIndex.js
+```
+
+Then pass the built index to the showcase:
+
+```html
+<JComponentShowcaseWithContent search-url="/search.vecito" />
+```
+
+See [MCP docs](https://varmory-dec8b20a1b83.herokuapp.com/#docs/MCP) for MCP server configuration and more options.
+
 ## Docs
 
 - [Usage](https://varmory-dec8b20a1b83.herokuapp.com/#docs/USAGE) — setting up a fresh app, Vite config, Quasar plugin wiring

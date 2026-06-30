@@ -1,7 +1,7 @@
 {
   "name": "varmory",
   "description": "Component showcase for Vue 3 + Quasar apps with a built-in MCP (Model Context Protocol) server. Drop in an interactive browser for Quasar and custom components, auto-loaded docs, and searchable API definitions — and expose the same metadata to AI agents like Claude via Streamable HTTP MCP. No extra glue needed.",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jeka-kiselyov/varmory.git"
@@ -14,6 +14,7 @@
     "dist",
     "mcp/showcaseMcp.js",
     "mcp/server.js",
+    "scripts/buildSearchIndex.js",
     "src/varmory/includes/normalizeQuasarApi.js",
     "src/varmory/includes/package.json"
   ],
@@ -32,7 +33,10 @@
     "servedemo": "vite --config demo.vite.config.mjs",
     "builddemo": "NODE_ENV=production vite build --config demo.vite.config.mjs --emptyOutDir",
     "buildcomponent": "NODE_ENV=production vite build --config component.vite.config.mjs",
+    "build:search": "node scripts/buildSearchIndex.js",
+    "exportdocs": "node mcp/exportDocs.js",
     "deploymcp": "npm run buildcomponent; npm run builddemo; bash mcp/heroku/deploy.sh varmory",
+    "test": "vitest run",
     "prepublishOnly": "npm run buildcomponent"
   },
   "peerDependencies": {
@@ -48,8 +52,9 @@
     "@quasar/vite-plugin": "^1.10.0",
     "@vitejs/plugin-vue": "^5.2.3",
     "quasar": "^2.19.2",
-    "vite": "^5.4.18",
+    "vite": "^6.4.3",
     "vite-plugin-lib-inject-css": "^2.2.2",
+    "vitest": "^4.1.9",
     "vue": "^3.5.13"
   },
   "sideEffects": [
@@ -71,5 +76,8 @@
   },
   "dependencies": {
     "@quasar/quasar-ui-qmarkdown": "^2.0.5"
+  },
+  "optionalDependencies": {
+    "vecito": "^0.1.1"
   }
 }

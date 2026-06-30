@@ -21,7 +21,7 @@ export default defineConfig({
         rollupOptions: {
             // make sure to externalize deps that shouldn't be bundled
             // into your library
-            external: ["vue", "quasar", "@quasar/extras", 'pinia'],
+            external: ["vue", "quasar", "@quasar/extras", 'pinia', 'vecito'],
             output: {
                 // Provide global variables to use in the UMD build
                 // for externalized deps

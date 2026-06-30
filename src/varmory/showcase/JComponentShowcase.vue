@@ -8,6 +8,7 @@
                     :categories="components"
                     :doc-pages="docPageNames"
                     :active-doc="isDocPage ? activeTab : null"
+                    :search-url="searchUrl"
                     @select="selectItem"
                     @select-doc="selectDoc"
                 />
@@ -70,6 +71,10 @@ export default {
         docs: {
             type: Object,
             default: () => ({}),
+        },
+        searchUrl: {
+            type: String,
+            default: null,
         },
     },
     provide() {

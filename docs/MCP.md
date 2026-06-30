@@ -68,6 +68,7 @@ attachShowcase(server, { rootDir: './node_modules/varmory' });
 | `files` | `string[]` | `[]` | Extra file paths on top of whatever `rootDir` produced. Classified by extension. |
 | `quasar` | `boolean` | `true` | When `false`, Quasar's component JSONs and its mixin/`extends` resolver data are **not** auto-loaded from `node_modules`. Definitions you pass via `files` still pass through the normalizer, they just won't have access to Quasar's shared `extends` / mixin pool. |
 | `maxDepth` | `number` | `5` | How deep the recursive search for `categories/` and `definitions/` folders goes under `rootDir`. Depth 0 is `rootDir` itself. |
+| `searchIndex` | `string\|null` | auto | Absolute path to a pre-built `.vecito` search index. When provided, `search_components` and `search_docs` use semantic search (hybrid dense + BM25). When omitted, defaults to `<rootDir>/src/public/search.vecito` if it exists. Pass `null` to disable vecito and use substring matching. |
 
 Files from `files` are merged **after** `rootDir` scanning, so `files` overrides same-named docs/definitions.
 
@@ -144,14 +145,37 @@ attachShowcase(server, {
 
 | Tool | Parameters | Description |
 |------|-----------|-------------|
-| `search_components` | `query: string` | Fuzzy search across component names and labels |
-| `search_docs` | `query: string` | Search documentation pages by name or content |
+| `search_components` | `query: string` | Search across component names and labels. Uses semantic search (vecito) when a search index is available, otherwise falls back to substring matching. |
+| `search_docs` | `query: string` | Search documentation pages by name or content. Uses semantic search (vecito) when a search index is available, otherwise falls back to substring matching. |
 | `get_component` | `name: string` | Returns a component's template code, category, and import info |
 | `get_api` | `name: string` | Returns a component's full API: props (with `default`/`values`/required flag/inherited tag), slots (with scope props), events (with payload params), and methods (with params + returns). |
 | `get_doc` | `name: string` | Returns the full markdown content of a doc page |
 
 All tools are annotated as read-only, non-destructive, and idempotent.
 
+## Semantic Search (vecito)
+
+By default, `search_components` and `search_docs` use simple substring matching. When a [vecito](https://www.npmjs.com/package/vecito) search index is available, they switch to hybrid semantic search (dense embeddings + BM25), which handles natural-language queries much better.
+
+### Building the search index
+
+```bash
+npm install vecito
+node scripts/buildSearchIndex.js
+```
+
+This creates `src/public/search.vecito` (~150 KB) from your showcase components and docs. The MCP server picks it up automatically on next start.
+
+Options:
+
+```bash
+node scripts/buildSearchIndex.js --root <dir>    # project root (default: cwd)
+node scripts/buildSearchIndex.js --out <path>     # output path
+node scripts/buildSearchIndex.js --no-quasar      # skip Quasar components
+node scripts/buildSearchIndex.js --model <name>   # embedding model
+```
+
+Rebuild the index whenever you add or change showcase components or docs.
 
 ## Testing with MCP Inspector
 

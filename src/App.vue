@@ -3,7 +3,7 @@
 		
 		<Header />
 
-		<JComponentShowcaseWithContent :components="components" />
+		<JComponentShowcaseWithContent :components="components" search-url="/search.vecito" />
 
 		<Footer />
 	</div>

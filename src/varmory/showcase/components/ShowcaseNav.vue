@@ -65,10 +65,7 @@
                         @click="$emit('select', { category: item.category, name: item.name })"
                     >
                         <QIcon :name="categoryIcons[item.category] || 'folder'" size="18px" />
-                        <div class="showcaseNav_result">
-                            <span>{{ item.label }}</span>
-                            <span class="showcaseNav_resultCat">{{ item.category }}</span>
-                        </div>
+                        <span>{{ item.label }}</span>
                     </div>
                     <div v-if="!searchResults.length" class="showcaseNav_empty">
                         No results
@@ -117,6 +114,7 @@
 
 <script>
 import { QCard, QIcon } from 'quasar';
+import { markRaw } from 'vue';
 
 export default {
     name: 'ShowcaseNav',
@@ -142,6 +140,10 @@ export default {
             type: String,
             default: null,
         },
+        searchUrl: {
+            type: String,
+            default: null,
+        },
     },
     emits: ['select', 'select-doc'],
     data() {
@@ -153,7 +155,21 @@ export default {
             query: '',
             expandedCats: expanded,
             docsExpanded: this.activeDoc && this.activeDoc !== 'README',
+            vecito: null,
+            vecitoResults: null,
         };
+    },
+    mounted() {
+        if (this.searchUrl) {
+            import('vecito').then(({ Vecito }) =>
+                Vecito.loadFromUrl(this.searchUrl),
+            ).then(v => {
+                this.vecito = markRaw(v);
+                console.log('[vecito] Search index loaded');
+            }).catch(err => {
+                console.error('[vecito] Failed to load search index:', err.message);
+            });
+        }
     },
     computed: {
         subDocPages() {
@@ -213,6 +229,7 @@ export default {
             return index;
         },
         searchResults() {
+            if (this.vecitoResults !== null) return this.vecitoResults;
             const q = this.query.trim().toLowerCase();
             if (!q) return [];
             const terms = q.split(/\s+/);
@@ -273,6 +290,20 @@ export default {
         },
     },
     watch: {
+        query(q) {
+            if (!this.vecito) { this.vecitoResults = null; return; }
+            const trimmed = q.trim();
+            if (!trimmed) { this.vecitoResults = null; return; }
+            clearTimeout(this._searchTimer);
+            this._searchTimer = setTimeout(() => {
+                this.vecito.search(trimmed, { top: 15, filter: m => m.type === 'component' }).then(hits => {
+                    if (this.query.trim() === trimmed) {
+                        this.vecitoResults = hits.map(h => h.metadata);
+                        console.log(`[vecito] "${trimmed}" →`, this.vecitoResults.map(r => r.label));
+                    }
+                });
+            }, 150);
+        },
         activeTab(cat) {
             if (!this.expandedCats[cat]) {
                 this.expandedCats[cat] = true;
@@ -459,6 +490,9 @@ export default {
 
 .showcaseNav_resultCat {
     letter-spacing: 1.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .showcaseNav_empty {

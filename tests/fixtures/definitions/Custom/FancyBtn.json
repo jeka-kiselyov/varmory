@@ -1,0 +1,36 @@
+{
+    "type": "component",
+    "props": {
+        "color": {
+            "type": "String",
+            "desc": "Button color",
+            "default": "primary",
+            "values": ["primary", "secondary", "accent"]
+        },
+        "size": {
+            "type": "String",
+            "desc": "Button size",
+            "values": ["sm", "md", "lg"]
+        },
+        "disabled": {
+            "type": "Boolean",
+            "desc": "Disable the button"
+        }
+    },
+    "events": {
+        "click": {
+            "desc": "Emitted when button is clicked",
+            "params": {
+                "event": {
+                    "type": "Event",
+                    "desc": "Native click event"
+                }
+            }
+        }
+    },
+    "slots": {
+        "default": {
+            "desc": "Default slot for button content"
+        }
+    }
+}

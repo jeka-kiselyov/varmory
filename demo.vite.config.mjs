@@ -14,6 +14,9 @@ export default defineConfig({
             quasar(),
             // libInjectCss(),
         ],
+    optimizeDeps: {
+        exclude: ['vecito', '@huggingface/transformers', 'altor-vec'],
+    },
     build: {
         rollupOptions: {
             external: [],

@@ -399,6 +399,29 @@ function loadQuasarNormalizerData(rootDir) {
     return { apiExtends, mixinLookup };
 }
 
+// ── Unified load pipeline ──────────────────────────────────────────────────
+
+/**
+ * Assemble and normalize the three in-memory caches from a varmory root dir
+ * and/or an explicit file list. Shared by `attachShowcase` (long-running MCP
+ * server) and `exportShowcaseDocs` (one-shot static export) so both see the
+ * exact same view of the project.
+ */
+function loadAll({ rootDir = null, files = [], quasar = true, maxDepth = 5 } = {}) {
+    const allFiles = [
+        ...(rootDir ? collectFilesFromRoot(rootDir, { quasar, maxDepth }) : []),
+        ...files,
+    ];
+    const { categories, docs, definitions } = loadFromFiles(allFiles);
+    const normalizerData = quasar
+        ? loadQuasarNormalizerData(rootDir)
+        : { apiExtends: {}, mixinLookup: {} };
+    for (const key of Object.keys(definitions)) {
+        definitions[key] = normalizeQuasarApi(definitions[key], normalizerData);
+    }
+    return { categories, docs, definitions };
+}
+
 // ── Markdown formatters (used by the get_api tool) ─────────────────────────
 
 function formatType(type) {
@@ -426,6 +449,156 @@ function formatProps(apiDef) {
     return lines.join('\n');
 }
 
+/**
+ * Render a single showcase component as markdown: heading, category, imports,
+ * and the `<template>` snippet in a fenced html block. Used by both the
+ * `get_component` MCP tool and the static exporter.
+ */
+function renderComponentMd(item, cat) {
+    const lines = [`# ${item.label}`, `Category: ${cat}`];
+    const impNames = Array.isArray(item.importName)
+        ? item.importName
+        : (item.importName ? [item.importName] : []);
+    for (const n of impNames) lines.push(`Import: ${n} from '${item.importFrom || 'varmory'}'`);
+    if (item.template) lines.push('', '## Template', '```html', item.template, '```');
+    return lines.join('\n');
+}
+
+/**
+ * Render a component's full API (props, slots, events, methods) as markdown.
+ * Used by both the `get_api` MCP tool and the static exporter.
+ */
+function renderApiMd(name, def) {
+    const lines = [`# ${name} API`, '', '## Props', formatProps(def)];
+
+    if (def.slots && Object.keys(def.slots).length) {
+        lines.push('', '## Slots');
+        for (const [slot, info] of Object.entries(def.slots)) {
+            lines.push(`- **${slot}** — ${info.desc || ''}${formatMixinTag(info)}`);
+            if (info.scope && Object.keys(info.scope).length) {
+                for (const [k, v] of Object.entries(info.scope)) {
+                    lines.push(`  - \`props.${k}\`: ${formatType(v?.type)} — ${v?.desc || ''}`);
+                }
+            }
+        }
+    }
+
+    if (def.events && Object.keys(def.events).length) {
+        lines.push('', '## Events');
+        for (const [event, info] of Object.entries(def.events)) {
+            lines.push(`- **${event}** — ${info.desc || ''}${formatMixinTag(info)}`);
+            if (info.params && Object.keys(info.params).length) {
+                for (const [k, v] of Object.entries(info.params)) {
+                    lines.push(`  - \`${k}\`: ${formatType(v?.type)} — ${v?.desc || ''}`);
+                }
+            }
+        }
+    }
+
+    if (def.methods && Object.keys(def.methods).length) {
+        lines.push('', '## Methods');
+        for (const [method, info] of Object.entries(def.methods)) {
+            lines.push(`- **${method}()** — ${info.desc || ''}${formatMixinTag(info)}`);
+            if (info.params && Object.keys(info.params).length) {
+                for (const [k, v] of Object.entries(info.params)) {
+                    const req = v?.required ? ' *(required)*' : '';
+                    lines.push(`  - param \`${k}\`${req}: ${formatType(v?.type)} — ${v?.desc || ''}`);
+                }
+            }
+            if (info.returns && typeof info.returns === 'object') {
+                lines.push(`  - returns: ${formatType(info.returns.type)} — ${info.returns.desc || ''}`);
+            }
+        }
+    }
+    return lines.join('\n');
+}
+
+// ── Doc enrichment ─────────────────────────────────────────────────────────
+
+/**
+ * Scan markdown for showcase hash links (`[label](#Cat/Name)` or
+ * `<a href="#Cat/Name">`) and inline each referenced item's `<template>` as
+ * a fenced html block right after the containing block (paragraph, heading,
+ * list, etc.) — never mid-line.
+ *
+ * Each `Cat/Name` is injected only on its first occurrence; later references
+ * stay as bare links. Links inside fenced code blocks are ignored, and
+ * unresolved refs are silently dropped. Returns the original content
+ * unchanged when no refs resolve.
+ */
+function enrichDocWithShowcaseLinks(content, categories) {
+    if (!content || !categories) return content;
+
+    const catKey = (cat) => {
+        if (categories[cat]) return cat;
+        const lc = cat.toLowerCase();
+        return Object.keys(categories).find(k => k.toLowerCase() === lc);
+    };
+
+    const resolve = (cat, name) => {
+        const key = catKey(cat);
+        if (!key) return null;
+        const lc = name.toLowerCase();
+        const item = categories[key].find(i =>
+            i.name.toLowerCase() === lc || i.label.toLowerCase() === lc,
+        );
+        if (!item || !item.template) return null;
+        return { cat: key, item };
+    };
+
+    const mdRe = /\[[^\]]+\]\(#([A-Za-z][A-Za-z0-9_-]*)\/([A-Za-z0-9_-]+)\)/g;
+    const htmlRe = /href\s*=\s*["']#([A-Za-z][A-Za-z0-9_-]*)\/([A-Za-z0-9_-]+)["']/g;
+
+    const out = [];
+    const injected = new Set();
+    let pending = [];
+    let inFence = false;
+
+    const flushPending = () => {
+        if (!pending.length) return;
+        // Ensure exactly one blank line sits between prior content and the
+        // first injection, regardless of whether we just pushed a blank.
+        if (out.length && out[out.length - 1].trim() !== '') out.push('');
+        for (const { cat, item } of pending) {
+            out.push(`<!-- showcase: ${cat}/${item.name} -->`);
+            out.push('```html');
+            out.push(item.template);
+            out.push('```');
+            out.push('');
+        }
+        pending = [];
+    };
+
+    for (const line of content.split('\n')) {
+        const isFenceMarker = /^\s*```/.test(line);
+        if (isFenceMarker) inFence = !inFence;
+
+        out.push(line);
+
+        if (!inFence && !isFenceMarker) {
+            for (const re of [mdRe, htmlRe]) {
+                re.lastIndex = 0;
+                let m;
+                while ((m = re.exec(line)) !== null) {
+                    const key = `${m[1]}/${m[2]}`;
+                    if (injected.has(key)) continue;
+                    const res = resolve(m[1], m[2]);
+                    if (!res) continue;
+                    injected.add(key);
+                    pending.push(res);
+                }
+            }
+        }
+
+        if (!inFence && line.trim() === '' && pending.length) flushPending();
+    }
+
+    // EOF flush — only kicks in when the doc has no trailing blank line.
+    if (pending.length) flushPending();
+
+    return out.join('\n');
+}
+
 // ── Public entry point ─────────────────────────────────────────────────────
 
 /**
@@ -447,80 +620,115 @@ function formatProps(apiDef) {
  *        but won't have access to Quasar's shared `extends` / mixin pool.
  * @param {number}  [options.maxDepth=5] - How deep the `categories/` /
  *        `definitions/` folder search goes under `rootDir`.
+ * @param {boolean} [options.inlineShowcaseExamples=true] - When true, docs
+ *        served via `get_doc` / the `doc` resource are post-processed to
+ *        append a `## Referenced showcase components` section with the
+ *        `<template>` of every `#Category/Name` link they contain. Set false
+ *        to serve raw markdown.
+ * @param {string|null} [options.searchIndex] - Absolute path to a pre-built
+ *        `.vecito` search index. When provided, `search_components` and
+ *        `search_docs` use semantic search. When omitted, defaults to
+ *        `<rootDir>/src/public/search.vecito` if it exists, otherwise
+ *        falls back to substring matching.
  * @returns {McpServer} The same server instance, now with resources and tools
  *        attached.
  */
+export { loadAll };
+
 export default function attachShowcase(server, options = {}) {
     const rootDir = options.rootDir || null;
     const quasar = options.quasar !== false;   // default true
     const maxDepth = options.maxDepth ?? 5;
+    const inlineShowcaseExamples = options.inlineShowcaseExamples !== false;
 
-    // Build one flat file list from (1) root-scan and (2) caller overrides,
-    // then run both through the same loader. `options.files` wins on
-    // same-named docs/definitions because it comes last.
-    const allFiles = [
-        ...(rootDir ? collectFilesFromRoot(rootDir, { quasar, maxDepth }) : []),
-        ...(options.files || []),
-    ];
-    const { categories, docs, definitions } = loadFromFiles(allFiles);
+    const { categories, docs, definitions } = loadAll({
+        rootDir,
+        files: options.files || [],
+        quasar,
+        maxDepth,
+    });
 
-    // Resolve `extends` / `mixins` in every definition. Pure no-op for
-    // definitions that don't have those markers, so hand-written JSONs
-    // (e.g. JPanel) are preserved byte-for-byte. When `quasar: false`, skip
-    // the (heavy) walk of node_modules/quasar/src — definitions still pass
-    // through normalize, just without Quasar's shared resolver pool.
-    const normalizerData = quasar ? loadQuasarNormalizerData(rootDir) : { apiExtends: {}, mixinLookup: {} };
-    for (const key of Object.keys(definitions)) {
-        definitions[key] = normalizeQuasarApi(definitions[key], normalizerData);
-    }
+    const serveDoc = (content) =>
+        inlineShowcaseExamples ? enrichDocWithShowcaseLinks(content, categories) : content;
+
+    // ── Vecito semantic search (loaded lazily from pre-built snapshot) ──
+    const vecitoReady = (() => {
+        if ('searchIndex' in options && !options.searchIndex) return null;
+        const snapshotPath = options.searchIndex
+            || (rootDir ? path.join(rootDir, 'src/public/search.vecito') : null);
+        if (!snapshotPath || !fs.existsSync(snapshotPath)) return null;
+        return import('vecito').then(({ Vecito }) => Vecito.load(snapshotPath)).catch((err) => {
+            console.error('[varmory] Failed to load vecito search index:', err.message);
+            return null;
+        });
+    })();
+
+    /** Wrap a tool handler with try/catch so failures return isError instead of crashing. */
+    const safeTool = (name, fn) => async (args) => {
+        try { return await fn(args); }
+        catch (err) {
+            console.error(`[varmory] ${name}:`, err);
+            return { isError: true, content: [{ type: 'text', text: `Error in ${name}: ${err.message}` }] };
+        }
+    };
 
     // ── Resources ──────────────────────────────────────────────────────
     // Resources are URI-addressable listings; MCP clients typically enumerate
     // them to discover what's available.
 
-    server.resource('docs-list', 'showcase://docs', async () => {
-        const names = Object.keys(docs);
-        const text = names.map(n => `- ${n}`).join('\n');
-        return {
-            contents: [{ uri: 'showcase://docs', text: `Available docs:\n${text}`, mimeType: 'text/plain' }],
-        };
-    });
+    const docNames = Object.keys(docs);
+    const defNames = Object.keys(definitions);
+
+    server.resource(
+        'docs-list',
+        { uri: 'showcase://docs', name: 'Documentation index', description: 'Lists all available documentation pages', mimeType: 'text/plain' },
+        async () => ({
+            contents: [{ uri: 'showcase://docs', text: `Available docs:\n${docNames.map(n => `- ${n}`).join('\n')}`, mimeType: 'text/plain' }],
+        }),
+    );
 
     server.resource(
         'doc',
-        new ResourceTemplate('showcase://docs/{name}', { list: undefined }),
+        new ResourceTemplate('showcase://docs/{name}', {
+            list: async () => ({
+                resources: docNames.map(n => ({ uri: `showcase://docs/${n}`, name: n })),
+            }),
+            description: 'Read a specific documentation page by name',
+        }),
         async (uri, { name }) => {
             const content = docs[name];
-            if (!content) return { contents: [] };
-            return {
-                contents: [{ uri: uri.href, text: content, mimeType: 'text/markdown' }],
-            };
+            if (!content) {
+                return { contents: [{ uri: uri.href, text: `Doc "${name}" not found. Available: ${docNames.join(', ')}`, mimeType: 'text/plain' }] };
+            }
+            return { contents: [{ uri: uri.href, text: serveDoc(content), mimeType: 'text/markdown' }] };
         },
     );
 
-    server.resource('components-list', 'showcase://components', async () => {
-        const lines = [];
-        for (const [cat, items] of Object.entries(categories)) {
-            lines.push(`## ${cat}`);
-            for (const item of items) {
-                const impNames = Array.isArray(item.importName) ? item.importName.join(', ') : item.importName;
-                const imp = impNames ? ` (${impNames})` : '';
-                lines.push(`- ${item.label}${imp}`);
+    server.resource(
+        'components-list',
+        { uri: 'showcase://components', name: 'Components index', description: 'Lists all showcase components grouped by category', mimeType: 'text/markdown' },
+        async () => {
+            const lines = [];
+            for (const [cat, items] of Object.entries(categories)) {
+                lines.push(`## ${cat}`);
+                for (const item of items) {
+                    const impNames = Array.isArray(item.importName) ? item.importName.join(', ') : item.importName;
+                    const imp = impNames ? ` (${impNames})` : '';
+                    lines.push(`- ${item.label}${imp}`);
+                }
+                lines.push('');
             }
-            lines.push('');
-        }
-        return {
-            contents: [{ uri: 'showcase://components', text: lines.join('\n'), mimeType: 'text/markdown' }],
-        };
-    });
+            return { contents: [{ uri: 'showcase://components', text: lines.join('\n'), mimeType: 'text/markdown' }] };
+        },
+    );
 
-    server.resource('definitions-list', 'showcase://definitions', async () => {
-        const names = Object.keys(definitions);
-        const text = names.map(n => `- ${n}`).join('\n');
-        return {
-            contents: [{ uri: 'showcase://definitions', text: `Available API definitions:\n${text}`, mimeType: 'text/plain' }],
-        };
-    });
+    server.resource(
+        'definitions-list',
+        { uri: 'showcase://definitions', name: 'API definitions index', description: 'Lists all available component API definitions', mimeType: 'text/plain' },
+        async () => ({
+            contents: [{ uri: 'showcase://definitions', text: `Available API definitions:\n${defNames.map(n => `- ${n}`).join('\n')}`, mimeType: 'text/plain' }],
+        }),
+    );
 
     // ── Tools ──────────────────────────────────────────────────────────
     // Tools are functions the model can call. All of ours are read-only —
@@ -533,16 +741,23 @@ export default function attachShowcase(server, options = {}) {
     server.tool(
         'search_components',
         'Search showcase components by name or label',
-        { query: z.string().describe('Search term to match against component names and labels') },
+        { query: z.string().min(1).describe('Search term to match against component names and labels') },
         readOnly,
-        async ({ query }) => {
-            const q = query.toLowerCase();
-            const results = [];
-            for (const [cat, items] of Object.entries(categories)) {
-                for (const item of items) {
-                    const impNames = Array.isArray(item.importName) ? item.importName : (item.importName ? [item.importName] : []);
-                    if (item.name.toLowerCase().includes(q) || item.label.toLowerCase().includes(q) || impNames.some(n => n.toLowerCase().includes(q))) {
-                        results.push({ category: cat, name: item.name, label: item.label });
+        safeTool('search_components', async ({ query }) => {
+            const vecito = vecitoReady ? await vecitoReady : null;
+            let results;
+            if (vecito) {
+                const hits = await vecito.search(query, { top: 15, filter: m => m.type === 'component' });
+                results = hits.map(h => h.metadata);
+            } else {
+                const q = query.toLowerCase();
+                results = [];
+                for (const [cat, items] of Object.entries(categories)) {
+                    for (const item of items) {
+                        const impNames = Array.isArray(item.importName) ? item.importName : (item.importName ? [item.importName] : []);
+                        if (item.name.toLowerCase().includes(q) || item.label.toLowerCase().includes(q) || impNames.some(n => n.toLowerCase().includes(q))) {
+                            results.push({ category: cat, name: item.name, label: item.label });
+                        }
                     }
                 }
             }
@@ -554,7 +769,7 @@ export default function attachShowcase(server, options = {}) {
                         : `No components matching "${query}"`,
                 }],
             };
-        },
+        }),
     );
 
     // Fetch a single showcase component's metadata + template snippet. Tries
@@ -562,23 +777,19 @@ export default function attachShowcase(server, options = {}) {
     server.tool(
         'get_component',
         'Get a showcase component\'s template code and metadata',
-        { name: z.string().describe('Component name (e.g. "Btn", "BasicPanel")') },
+        { name: z.string().min(1).describe('Component name (e.g. "Btn", "BasicPanel")') },
         readOnly,
-        async ({ name }) => {
+        safeTool('get_component', async ({ name }) => {
             const q = name.toLowerCase();
             for (const [cat, items] of Object.entries(categories)) {
                 const impMatch = (imp) => { const names = Array.isArray(imp) ? imp : (imp ? [imp] : []); return names.some(n => n.toLowerCase() === q); };
                 const item = items.find(i => i.name.toLowerCase() === q || i.label.toLowerCase() === q || impMatch(i.importName));
                 if (item) {
-                    const lines = [`# ${item.label}`, `Category: ${cat}`];
-                    const impNames = Array.isArray(item.importName) ? item.importName : (item.importName ? [item.importName] : []);
-                    for (const n of impNames) lines.push(`Import: ${n} from '${item.importFrom || 'varmory'}'`);
-                    if (item.template) lines.push('', '## Template', '```html', item.template, '```');
-                    return { content: [{ type: 'text', text: lines.join('\n') }] };
+                    return { content: [{ type: 'text', text: renderComponentMd(item, cat) }] };
                 }
             }
-            return { content: [{ type: 'text', text: `Component "${name}" not found.` }] };
-        },
+            return { isError: true, content: [{ type: 'text', text: `Component "${name}" not found.` }] };
+        }),
     );
 
     // Render a component's full API (props, slots, events, methods) as
@@ -587,59 +798,15 @@ export default function attachShowcase(server, options = {}) {
     server.tool(
         'get_api',
         'Get the API definition (props, slots, events) for a component',
-        { name: z.string().describe('Component name (e.g. "QBtn", "JPanel")') },
+        { name: z.string().min(1).describe('Component name (e.g. "QBtn", "JPanel")') },
         readOnly,
-        async ({ name }) => {
+        safeTool('get_api', async ({ name }) => {
             const def = definitions[name];
             if (!def) {
-                return { content: [{ type: 'text', text: `No API definition found for "${name}". Available: ${Object.keys(definitions).join(', ')}` }] };
+                return { isError: true, content: [{ type: 'text', text: `No API definition found for "${name}". Available: ${defNames.join(', ')}` }] };
             }
-            const lines = [`# ${name} API`, '', '## Props', formatProps(def)];
-
-            if (def.slots && Object.keys(def.slots).length) {
-                lines.push('', '## Slots');
-                for (const [slot, info] of Object.entries(def.slots)) {
-                    lines.push(`- **${slot}** — ${info.desc || ''}${formatMixinTag(info)}`);
-                    // Scoped slot props — indented under the slot bullet.
-                    if (info.scope && Object.keys(info.scope).length) {
-                        for (const [k, v] of Object.entries(info.scope)) {
-                            lines.push(`  - \`props.${k}\`: ${formatType(v?.type)} — ${v?.desc || ''}`);
-                        }
-                    }
-                }
-            }
-
-            if (def.events && Object.keys(def.events).length) {
-                lines.push('', '## Events');
-                for (const [event, info] of Object.entries(def.events)) {
-                    lines.push(`- **${event}** — ${info.desc || ''}${formatMixinTag(info)}`);
-                    // Event payload args — one bullet per param.
-                    if (info.params && Object.keys(info.params).length) {
-                        for (const [k, v] of Object.entries(info.params)) {
-                            lines.push(`  - \`${k}\`: ${formatType(v?.type)} — ${v?.desc || ''}`);
-                        }
-                    }
-                }
-            }
-
-            if (def.methods && Object.keys(def.methods).length) {
-                lines.push('', '## Methods');
-                for (const [method, info] of Object.entries(def.methods)) {
-                    lines.push(`- **${method}()** — ${info.desc || ''}${formatMixinTag(info)}`);
-                    // Method params + return — indented under the method bullet.
-                    if (info.params && Object.keys(info.params).length) {
-                        for (const [k, v] of Object.entries(info.params)) {
-                            const req = v?.required ? ' *(required)*' : '';
-                            lines.push(`  - param \`${k}\`${req}: ${formatType(v?.type)} — ${v?.desc || ''}`);
-                        }
-                    }
-                    if (info.returns && typeof info.returns === 'object') {
-                        lines.push(`  - returns: ${formatType(info.returns.type)} — ${info.returns.desc || ''}`);
-                    }
-                }
-            }
-            return { content: [{ type: 'text', text: lines.join('\n') }] };
-        },
+            return { content: [{ type: 'text', text: renderApiMd(name, def) }] };
+        }),
     );
 
     // Simple full-text search across docs. Returns the first matching line as
@@ -647,15 +814,29 @@ export default function attachShowcase(server, options = {}) {
     server.tool(
         'search_docs',
         'Search documentation pages by name or content',
-        { query: z.string().describe('Search term to match against doc names and content') },
+        { query: z.string().min(1).describe('Search term to match against doc names and content') },
         readOnly,
-        async ({ query }) => {
-            const q = query.toLowerCase();
-            const results = [];
-            for (const [name, content] of Object.entries(docs)) {
-                if (name.toLowerCase().includes(q) || content.toLowerCase().includes(q)) {
-                    const snippet = content.split('\n').find(l => l.toLowerCase().includes(q))?.trim() || '';
-                    results.push({ name, snippet: snippet.slice(0, 120) });
+        safeTool('search_docs', async ({ query }) => {
+            const vecito = vecitoReady ? await vecitoReady : null;
+            let results;
+            if (vecito) {
+                const { Highlighter } = await import('vecito');
+                const hits = await vecito.search(query, { top: 5, filter: m => m.type === 'doc', matchedTerms: true });
+                results = hits.map(h => {
+                    const content = docs[h.metadata.name] || '';
+                    const snippet = h.matchedTerms
+                        ? Highlighter.snippet(content, h.matchedTerms)
+                        : content.slice(0, 120);
+                    return { name: h.metadata.name, snippet: snippet.slice(0, 120) };
+                });
+            } else {
+                const q = query.toLowerCase();
+                results = [];
+                for (const [name, content] of Object.entries(docs)) {
+                    if (name.toLowerCase().includes(q) || content.toLowerCase().includes(q)) {
+                        const snippet = content.split('\n').find(l => l.toLowerCase().includes(q))?.trim() || '';
+                        results.push({ name, snippet: snippet.slice(0, 120) });
+                    }
                 }
             }
             return {
@@ -666,23 +847,144 @@ export default function attachShowcase(server, options = {}) {
                         : `No docs matching "${query}"`,
                 }],
             };
-        },
+        }),
     );
 
     // Return the full raw markdown of a single doc.
     server.tool(
         'get_doc',
         'Read a documentation page by name',
-        { name: z.string().describe('Doc page name (e.g. "README", "THEMING", "SHOWCASE")') },
+        { name: z.string().min(1).describe('Doc page name (e.g. "README", "THEMING", "SHOWCASE")') },
         readOnly,
-        async ({ name }) => {
+        safeTool('get_doc', async ({ name }) => {
             const content = docs[name];
             if (!content) {
-                return { content: [{ type: 'text', text: `Doc "${name}" not found. Available: ${Object.keys(docs).join(', ')}` }] };
+                return { isError: true, content: [{ type: 'text', text: `Doc "${name}" not found. Available: ${docNames.join(', ')}` }] };
             }
-            return { content: [{ type: 'text', text: content }] };
-        },
+            return { content: [{ type: 'text', text: serveDoc(content) }] };
+        }),
     );
 
     return server;
+}
+
+// ── Static export ──────────────────────────────────────────────────────────
+
+/**
+ * Export the docs, components, and API definitions as standalone markdown
+ * files under `outDir`. Useful for publishing a browsable snapshot of the
+ * showcase alongside (or instead of) the live MCP server.
+ *
+ * Output layout:
+ *   <outDir>/README.md                   (only when a source README.md exists;
+ *                                         the original content plus an
+ *                                         appended index of everything below)
+ *   <outDir>/docs/<name>.md              (each markdown doc, optionally
+ *                                         enriched with showcase templates)
+ *   <outDir>/components/<Cat>/<Name>.md  (each .vue showcase rendered)
+ *   <outDir>/definitions/<Name>.md       (each API definition rendered)
+ *
+ * @param {object} options
+ * @param {string}  options.rootDir                 - varmory project root (required).
+ * @param {string}  [options.outDir]                - Target directory. Default: `<rootDir>/dist/docs`.
+ * @param {boolean} [options.quasar=true]           - Include Quasar's component JSONs.
+ * @param {number}  [options.maxDepth=5]            - Search depth for categories/definitions folders.
+ * @param {boolean} [options.inlineShowcaseExamples=true] - Enrich docs with referenced showcase templates.
+ * @param {boolean} [options.clean=true]            - Remove `outDir` before writing.
+ *        Only permitted when `outDir` resolves inside `rootDir`; otherwise throws.
+ * @returns {{ outDir: string, docs: number, components: number, definitions: number, cleaned: boolean }}
+ */
+export function exportShowcaseDocs(options = {}) {
+    const {
+        rootDir,
+        quasar = true,
+        maxDepth = 5,
+        inlineShowcaseExamples = true,
+        clean = true,
+    } = options;
+    if (!rootDir) throw new Error('exportShowcaseDocs: `rootDir` is required');
+
+    const resolvedRoot = path.resolve(rootDir);
+    const resolvedOut = path.resolve(options.outDir || path.join(resolvedRoot, 'dist/docs'));
+
+    let cleaned = false;
+    if (clean) {
+        // Safety belt: refuse to clean a path that sits outside rootDir so a
+        // misconfigured outDir can't wipe unintended directories.
+        const rel = path.relative(resolvedRoot, resolvedOut);
+        if (!rel || rel.startsWith('..') || path.isAbsolute(rel)) {
+            throw new Error(
+                `exportShowcaseDocs: refusing to clean outDir (${resolvedOut}) — must be inside rootDir (${resolvedRoot}). Pass clean: false to skip.`,
+            );
+        }
+        fs.rmSync(resolvedOut, { recursive: true, force: true });
+        cleaned = true;
+    }
+
+    const { categories, docs, definitions } = loadAll({ rootDir: resolvedRoot, quasar, maxDepth });
+
+    fs.mkdirSync(resolvedOut, { recursive: true });
+    const docsOut = path.join(resolvedOut, 'docs');
+    const componentsOut = path.join(resolvedOut, 'components');
+    const definitionsOut = path.join(resolvedOut, 'definitions');
+
+    // Docs. README is skipped here — it becomes the top-level index below.
+    let docCount = 0;
+    const docNames = Object.keys(docs).filter(n => n !== 'README').sort();
+    if (docNames.length) fs.mkdirSync(docsOut, { recursive: true });
+    for (const name of docNames) {
+        const body = inlineShowcaseExamples
+            ? enrichDocWithShowcaseLinks(docs[name], categories)
+            : docs[name];
+        fs.writeFileSync(path.join(docsOut, `${name}.md`), body);
+        docCount++;
+    }
+
+    // Components.
+    let componentCount = 0;
+    const catNames = Object.keys(categories).sort();
+    if (catNames.length) fs.mkdirSync(componentsOut, { recursive: true });
+    for (const cat of catNames) {
+        const catDir = path.join(componentsOut, cat);
+        fs.mkdirSync(catDir, { recursive: true });
+        for (const item of categories[cat]) {
+            fs.writeFileSync(path.join(catDir, `${item.name}.md`), renderComponentMd(item, cat));
+            componentCount++;
+        }
+    }
+
+    // API definitions.
+    let definitionCount = 0;
+    const defNames = Object.keys(definitions).sort();
+    if (defNames.length) fs.mkdirSync(definitionsOut, { recursive: true });
+    for (const name of defNames) {
+        fs.writeFileSync(path.join(definitionsOut, `${name}.md`), renderApiMd(name, definitions[name]));
+        definitionCount++;
+    }
+
+    // Index README (only when source README exists).
+    if (docs['README']) {
+        const parts = [docs['README'].trimEnd(), '', '## Docs', ''];
+        for (const name of docNames) parts.push(`- [${name}](docs/${name}.md)`);
+        parts.push('', '## Components', '');
+        for (const cat of catNames) {
+            parts.push(`### ${cat}`, '');
+            for (const item of categories[cat]) {
+                parts.push(`- [${item.label}](components/${cat}/${item.name}.md)`);
+            }
+            parts.push('');
+        }
+        parts.push('## API definitions', '');
+        for (const name of defNames) parts.push(`- [${name}](definitions/${name}.md)`);
+        parts.push('');
+        fs.writeFileSync(path.join(resolvedOut, 'README.md'), parts.join('\n'));
+    }
+
+    return {
+        outDir: resolvedOut,
+        docs: docCount,
+        components: componentCount,
+        definitions: definitionCount,
+        cleaned,
+    };
 }
