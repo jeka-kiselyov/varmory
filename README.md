@@ -18,7 +18,7 @@ npm install varmory
 Peer dependencies:
 
 ```bash
-npm install vue@^3 quasar@^2 @quasar/extras@^1
+npm install vue@^3 quasar@^2 @quasar/extras@^2
 ```
 
 ## Setup
@@ -62,7 +62,7 @@ See [USAGE.md](https://varmory-dec8b20a1b83.herokuapp.com/#docs/USAGE) for the r
 The showcase sidebar and MCP server support semantic search via [vecito](https://www.npmjs.com/package/vecito). It's an optional dependency — when installed, search uses hybrid dense embeddings + BM25; otherwise it falls back to substring matching.
 
 ```bash
-pnpm add vecito
+npm install vecito
 node node_modules/varmory/scripts/buildSearchIndex.js
 ```
 

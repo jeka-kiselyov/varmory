@@ -139,3 +139,9 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Demo build artifacts (vecito wasm + bundles + search index)
+demo/assets/*.wasm
+demo/assets/index2.js
+demo/assets/altor_vec_wasm.js
+demo/search.vecito

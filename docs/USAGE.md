@@ -37,3 +37,26 @@ createApp(App)
 Quasar's base CSS and the icon pack CSS are expected to be imported on the app side (so you can swap icon packs per project). Any Quasar plugins (`Notify`, `Dialog`, etc.) are configured on the `Quasar` install call — varmory doesn't take any options of its own.
 
 When building the app and its components with varmory, follow the conventions in [CustomComponents.md](CustomComponents.md) — API style, CSS variables, class naming, and component structure.
+
+## Semantic Search (optional)
+
+The showcase sidebar supports semantic search via [vecito](https://www.npmjs.com/package/vecito). Without it, search falls back to substring matching. With it, search uses hybrid dense embeddings + BM25 and handles natural-language queries much better.
+
+```bash
+npm install vecito
+node node_modules/varmory/scripts/buildSearchIndex.js
+```
+
+This builds `src/public/search.vecito` (~150 KB) from your components and docs. Pass the index URL to the showcase component:
+
+```html
+<JComponentShowcaseWithContent search-url="/search.vecito" />
+```
+
+Rebuild the index whenever you add or change showcase components or docs. The same index is picked up automatically by the MCP server — see [MCP.md](MCP.md) for details.
+
+## MCP Server
+
+Varmory includes an MCP server that exposes your component catalog, API definitions, and docs to AI agents like Claude. Once set up, agents can search components, read templates, and look up props/slots/events without manually reading source files.
+
+See [MCP.md](MCP.md) for setup and configuration.
