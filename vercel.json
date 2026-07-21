@@ -1,5 +1,0 @@
-{
-	"buildCommand": "npm run builddemo",
-	"outputDirectory": "demo",
-	"framework": null
-}
