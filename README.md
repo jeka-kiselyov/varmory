@@ -9,6 +9,14 @@ Drop in an interactive browser for the Quasar components you use and any custom 
 
 > See [**themed_varmory**](https://github.com/jeka-kiselyov/themed_varmory) for a reference example of using varmory as a base to build your own themed component library — swappable themes, a theme store, custom components, and an MCP server with an extended set of components and API definitions.
 
+## Quickest start: ask an AI agent
+
+The fastest way to build with varmory is to let an AI agent do it. Point your agent at the hosted showcase and ask it to build something:
+
+> Build me a to-do app using https://varmory-dec8b20a1b83.herokuapp.com/ as the component library
+
+The showcase host exposes an [MCP server](https://varmory-dec8b20a1b83.herokuapp.com/#docs/MCP) and machine-readable component/doc endpoints, so agents like Claude can discover every component, its API, and the docs automatically — no manual setup on your side.
+
 ## Installation
 
 ```bash

@@ -1,6 +1,6 @@
 # Usage
 
-Varmory wraps [Quasar](https://quasar.dev/) (Vue 3). When you install varmory via `app.use()`, varmory's showcase components (`JComponentShowcase`, `JComponentShowcaseWithContent`) are registered globally.
+Varmory wraps [Quasar](https://quasar.dev/) (Vue 3). When you install varmory via `app.use()`, varmory's showcase components (`JComponentShowcase`, `JComponentShowcaseWithContent`) are registered globally. See [SHOWCASE.md](SHOWCASE.md) for showcase instructions.
 
 Quasar components (`QBtn`, `QInput`, `QIcon`, etc.) are registered separately by `@quasar/vite-plugin` in your Vite config:
 

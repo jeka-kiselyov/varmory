@@ -1,6 +1,6 @@
 # JComponentShowcase
 
-Interactive documentation browser for your components. Includes a nav sidebar, live preview, and code/API reference panel.
+Interactive documentation browser for your components. Includes a nav sidebar, live preview, and code/API reference panel. A live demo is available at [varmory-dec8b20a1b83.herokuapp.com](https://varmory-dec8b20a1b83.herokuapp.com/).
 
 There are two variants:
 
